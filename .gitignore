@@ -1,0 +1,4 @@
+# Admin
+/admin/node_modules
+/admin/dist
+/admin/package-lock.json
