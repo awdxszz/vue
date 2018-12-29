@@ -28,7 +28,7 @@ class SysAdmin extends Model{
   public function setUname($uname){
     // 是否合法
     if(!preg_match('/^[a-zA-Z][a-zA-Z0-9\_\@\-\*\&]{3,15}$/',$uname)){
-      throw new \InvalidArgumentException('用户密码长度不足5位');
+      throw new \InvalidArgumentException('英文字母开头的4~16位字符！');
     }
     // 是否存在
     $where = 'uname=:uname:';
