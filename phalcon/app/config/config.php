@@ -6,7 +6,7 @@
 
 return new \Phalcon\Config([
   'version' => '0.0.1',
-  'key'=>md5('xar_app'),  // 加密字符串
+  'key'=>md5('webmis'),  // 加密字符串
   'token_time'=>1*24*3600,  // Token有效期
 	// 数据库配置
 	'database' => [
