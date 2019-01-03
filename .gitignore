@@ -2,3 +2,7 @@
 /admin/node_modules
 /admin/dist
 /admin/package-lock.json
+# APP
+/app/node_modules
+/app/dist
+/app/package-lock.json
