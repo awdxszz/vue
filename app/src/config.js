@@ -8,7 +8,7 @@ export default function install(Vue){
     name:'WebMIS',
     version: '0.0.1',
     link_name: 'WebMIS',
-    apiUrl: 'http://localhost:9092/api/',
+    apiUrl: 'http://192.168.1.88:9091/api/',
   }
 
   // 本地硬盘

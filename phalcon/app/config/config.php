@@ -8,6 +8,8 @@ return new \Phalcon\Config([
   'version' => '0.0.1',
   'key'=>md5('webmis'),  // 加密字符串
   'token_time'=>1*24*3600,  // Token有效期
+  'login_num'=>50,  // 登录次数
+  'login_num_time'=>12*3600,  // 限制时长
 	// 数据库配置
 	'database' => [
 		'adapter'=>'Mysql',

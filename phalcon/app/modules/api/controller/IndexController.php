@@ -2,7 +2,7 @@
 
 namespace app\modules\api\controller;
 
-class IndexController extends BaseController{
+class IndexController extends Base{
 	/* 首页 */
 	function indexAction(){
 		return 'Api';
