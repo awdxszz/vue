@@ -15,6 +15,8 @@ export default {
     }
   },
   mounted(){
+    // 翠湖公园
+    // this.getMaps(102.702315,25.05094);
     // 定位插件
     document.addEventListener('plusready', this.geolocation(), false);
   },

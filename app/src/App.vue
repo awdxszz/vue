@@ -38,9 +38,18 @@
                 </li>
               </ul>
             </div>
-            <!-- 照片 -->
+            <!-- 录音 -->
             <div class="in_ct mtop">
-              <div class="in_title"><span class="line" :style="{backgroundColor:'#6FB737'}"></span><span class="title">照片</span></div>
+              <div class="in_title"><span class="line" :style="{backgroundColor:'#FF6600'}"></span><span class="title">录音</span></div>
+              <ul class="in_list">
+                <li v-for="(val,key) in audio" :key="key">
+                  <div class="ct"><img :src="val.image"><p>{{val.title}}</p></div>
+                </li>
+              </ul>
+            </div>
+            <!-- 拍照 -->
+            <div class="in_ct mtop">
+              <div class="in_title"><span class="line" :style="{backgroundColor:'#3385FF'}"></span><span class="title">拍照</span></div>
               <ul class="in_list">
                 <li v-for="(val,key) in photo" :key="key">
                   <div class="ct"><img :src="val.image"><p>{{val.title}}</p></div>
@@ -54,15 +63,15 @@
       <!-- 首页 End -->
 
       <!-- 视频 -->
-      <div v-if="tabs.click=='视频'" class="video_body">
+      <div v-if="tabs.click=='采访'" class="video_body">
         <!-- TOP -->
         <header class="header video_header">
-          <span class="text_left">视频</span>
+          <span class="text_left">采访</span>
           <label class="video_sea">
             <i class="ico ico_sea"></i>
-            <input type="text" class="input" placeholder="请输入视频名称" />
+            <input type="text" class="input" placeholder="请输入专题名称" />
           </label>
-          <span class="ico_right"><i class="cubeic-add"></i></span>
+          <span class="ico_right" @click="selectVideo()"><i class="cubeic-add"></i></span>
         </header>
         <!-- 滑动内容 -->
         <div class="video_ct">
@@ -105,10 +114,12 @@
           </header>
           <div class="me_info">
             <div class="text">
-              <div class="nick"><b>{{uinfo.nickname}}</b></div>
-              <div class="name">{{uinfo.uname}}({{uinfo.name}})</div>
+              <div class="nick" v-if="uinfo.nickname"><b>{{uinfo.nickname}}</b></div>
+              <div class="nick" v-else><b>用户昵称</b></div>
+              <div class="name">{{uinfo.uname}}<span v-if="uinfo.name">({{uinfo.name}})</span></div>
             </div>
-            <div class="img" :style="{backgroundImage: 'url('+uinfo.img+')'}"></div>
+            <div class="img" v-if="uinfo.img" :style="{backgroundImage: 'url('+uinfo.img+')'}"></div>
+            <div class="img" v-else :style="{backgroundImage: 'url('+require('./assets/index/store_img.png')+')'}"></div>
           </div>
         </div>
         <!-- 滑动内容 -->
@@ -151,6 +162,12 @@
                   <span class="title">用户反馈</span>
                   <i class="cubeic-arrow"></i>
                   <span class="info">{{meInfo.tel}}</span>
+                </li>
+                <li>
+                  <span class="ico" :style="{backgroundImage: 'url('+require('./assets/user/amount.png')+')'}"></span>
+                  <span class="title">清理缓存</span>
+                  <i class="cubeic-arrow"></i>
+                  <span class="info">{{meInfo.version}}</span>
                 </li>
                 <li>
                   <span class="ico" :style="{backgroundImage: 'url('+require('./assets/user/system.png')+')'}"></span>
@@ -245,7 +262,7 @@ ul{list-style: none;}
 .in_menu{overflow: hidden; background-color: #FFF; padding: 0 15px;}
 .in_menu li{float: left; width: 25%; text-align: center; padding: 5px 0;}
 .in_menu a{display: inline-block;}
-.in_menu span{display: inline-block; width: 64px; height: 64px; background-color: #F2F4F6; background-size: 90%; background-position: center center; border-radius: 50%;}
+.in_menu span{display: inline-block; width: 64px; height: 64px; background-repeat: no-repeat; background-color: #F2F4F6; background-size: 60%; background-position: center center; border-radius: 50%;}
 .in_menu p{line-height: 24px; font-size: 12px;}
 
 .in_ct{background: #FFF;}
@@ -271,8 +288,8 @@ ul{list-style: none;}
 
 .video_list{overflow: hidden;}
 .video_list li{overflow: hidden; margin-top: 1px; background-color: #FFF;}
-.video_list .ct{overflow: hidden; padding: 10px;}
-.video_list .img{float: left; width: 140px; height: 85px; background-size: 100% auto; background-position: center center; background-repeat: no-repeat;}
+.video_list .ct{overflow: hidden; padding: 5px;}
+.video_list .img{float: left; width: 140px; height: 90px; background-size: 100% auto; background-position: center center; background-repeat: no-repeat;}
 .video_list .title{padding: 8px 10px;}
 .video_list .text{overflow: hidden;}
 .video_list .text h1{font-size: 16px;}

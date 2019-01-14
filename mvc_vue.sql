@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主机： localhost
--- 生成日期： 2018-12-29 17:41:27
+-- 生成日期： 2019-01-13 20:50:10
 -- 服务器版本： 10.1.37-MariaDB
--- PHP 版本： 7.3.0
+-- PHP 版本： 7.3.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -112,6 +112,35 @@ INSERT INTO `sys_menus_action` (`id`, `name`, `action`, `perm`, `ico`) VALUES
 (8, '导入', 'imp', '128', 'el-icon-d-arrow-left'),
 (9, '图表', 'chart', '256', 'el-icon-picture');
 
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `web_user`
+--
+
+CREATE TABLE `web_user` (
+  `id` int(10) UNSIGNED NOT NULL COMMENT 'ID',
+  `user_id` varchar(18) NOT NULL COMMENT '编码',
+  `uname` varchar(16) NOT NULL COMMENT '用户名',
+  `password` varchar(32) NOT NULL COMMENT '密码',
+  `tel` varchar(11) NOT NULL DEFAULT '' COMMENT '手机',
+  `email` varchar(32) NOT NULL DEFAULT '' COMMENT '邮箱',
+  `state` enum('0','1') NOT NULL DEFAULT '1' COMMENT '状态(0禁用,1正常)',
+  `ctime` datetime DEFAULT NULL COMMENT '创建时间',
+  `name` varchar(12) NOT NULL DEFAULT '' COMMENT '姓名',
+  `sex` enum('','男','女') NOT NULL DEFAULT '' COMMENT '性别',
+  `birthday` date DEFAULT NULL COMMENT '生日',
+  `nickname` varchar(6) NOT NULL DEFAULT '' COMMENT '昵称',
+  `img` varchar(128) NOT NULL DEFAULT '' COMMENT '头像'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- 转存表中的数据 `web_user`
+--
+
+INSERT INTO `web_user` (`id`, `user_id`, `uname`, `password`, `tel`, `email`, `state`, `ctime`, `name`, `sex`, `birthday`, `nickname`, `img`) VALUES
+(1, '201901131656498288', 'user', 'e10adc3949ba59abbe56e057f20f883e', '15087738003', 'user@163.com', '1', '2019-01-13 00:00:00', '杨文春', '男', '1984-12-17', '测试昵称', 'https://img5.duitang.com/uploads/item/201410/05/20141005082835_2RTzn.thumb.700_0.jpeg');
+
 --
 -- 转储表的索引
 --
@@ -135,6 +164,12 @@ ALTER TABLE `sys_menus_action`
   ADD PRIMARY KEY (`id`);
 
 --
+-- 表的索引 `web_user`
+--
+ALTER TABLE `web_user`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- 在导出的表使用AUTO_INCREMENT
 --
 
@@ -155,6 +190,12 @@ ALTER TABLE `sys_menus`
 --
 ALTER TABLE `sys_menus_action`
   MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID', AUTO_INCREMENT=10;
+
+--
+-- 使用表AUTO_INCREMENT `web_user`
+--
+ALTER TABLE `web_user`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID', AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
