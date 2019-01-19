@@ -7,8 +7,8 @@ export default function install(Vue){
   Vue.prototype.$config = {
     name:'WebMIS',
     version: '0.0.1',
-    apiUrl: 'http://localhost:9091/admin/',
-    // apiUrl: 'http://192.168.1.140:9091/index.php?s=/admin_api/',
+    // apiUrl: 'http://192.168.1.88:9091/admin/',
+    apiUrl: 'http://vue.webmis.vip/admin/',
   }
 
   // 本地硬盘

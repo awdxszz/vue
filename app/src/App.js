@@ -56,19 +56,19 @@ export default {
       ],
       // 菜单
       menus:[
-        {name:'视频',url:'/test',ico:require('./assets/index/video.svg')},
-        {name:'录音',url:'/test',ico:require('./assets/index/audio.svg')},
-        {name:'拍照',url:'/test',ico:require('./assets/index/photo.svg')},
+        {name:'视频',url:'/video/video',ico:require('./assets/index/video.svg')},
+        {name:'录音',url:'/video/audio',ico:require('./assets/index/audio.svg')},
+        {name:'拍照',url:'/video/photo',ico:require('./assets/index/photo.svg')},
       ],
       /* 视频 */
       videoData:[
         {
           item:{id:'201810161723560001',title:'回到明朝当王爷之杨凌传',name:'姓名',tel:'15087738003',key:'蒙面唱将猜猜猜 第三季',image:'http://r1.ykimg.com/050C00005BFE61C8ADA80C3FB0005C6F'},
-          btns:[{action:'tel',text:'详细信息',color:'#A2A4A6',val:'201810161723560001'},{action:'send',text:'删除',color:'#FF0000',val:'201810161723560001'}]
+          btns:[{action:'tel',text:'编辑信息',color:'#A2A4A6',val:'201810161723560001'},{action:'send',text:'删除',color:'#FF0000',val:'201810161723560001'}]
         },
         {
           item:{id:'201810161723560002',title:'我的保姆手册',name:'姓名',tel:'15087738003',key:'挑战吧!太空',image:'http://r1.ykimg.com/050C00005BFE639FADA80C365B057C86'},
-          btns:[{action:'tel',text:'详细信息',color:'#A2A4A6',val:'201810161723560002'},{action:'send',text:'删除',color:'#FF0000',val:'201810161723560002'}]
+          btns:[{action:'tel',text:'编辑信息',color:'#A2A4A6',val:'201810161723560002'},{action:'send',text:'删除',color:'#FF0000',val:'201810161723560002'}]
         },
       ],
       // 我的
@@ -80,6 +80,7 @@ export default {
       },
       meInfo:{
         tel:'0871-67777777',
+        cache: {size: 0, info: '0 KB'},
         version:'版本 '+this.$config.version,
       },
     }
@@ -116,6 +117,8 @@ export default {
       }).catch(function(e){
         _self.$createToast({txt:'网络加载失败，请重试'}).show();
       });
+      // 系统缓存
+      document.addEventListener('plusready', this.getDrcSize(), false);
     },
 
     /* 地图 */
@@ -134,7 +137,13 @@ export default {
         title: '采访方式',active: 0,
         data: [{content:'视频'},{content:'录音'},{content:'拍照'}],
         onSelect: (item, index)=>{
-          console.log(item.content);
+          if(index==0){
+            this.$router.push('/video/video');
+          }else if(index==1){
+            this.$router.push('/video/audio');
+          }else if(index==2){
+            this.$router.push('/video/photo');
+          }
         }
       }).show();
     },
@@ -196,6 +205,63 @@ export default {
       // 改变背景色
       if(-y>=0 && -y<=100) this.scroll.index.color = (-y/100).toFixed(2);
     },
+
+    /* 系统缓存 */
+		clearCache: function() {
+      var _self = this;
+      try{
+        plus.io.resolveLocalFileSystemURL('_doc/', function(entry) {
+          entry.removeRecursively();
+          _self.$createToast({txt:'清除成功'}).show();
+          _self.meInfo.cache.info = '0 KB';
+
+        }, function(e) {
+          _self.$createToast({txt:'清除文件失败'}).show();
+        });
+      }catch(e){
+        _self.$createToast({txt:'Plus只能运行手机设备'}).show();
+      }
+		},
+		getDrcSize: function() {
+			this.meInfo.cache.size = 0;
+			this.getSize('_doc/');
+		},
+		getSize: function(d) {
+      var _self = this;
+      try{
+        plus.io.resolveLocalFileSystemURL(d, function(fs) {
+          var drc = fs.createReader();
+          drc.readEntries(function(entries) {
+            for(var i = 0; i < entries.length; i++) {
+              if(entries[i].isDirectory) {
+                _self.getSize(entries[i].fullPath)
+              } else {
+                entries[i].file(function(e) {
+                  _self.meInfo.cache.size += e.size;
+                  _self.toSize(_self.meInfo.cache.size);
+                })
+              }
+            }
+          }, function(e) {
+            _self.$createToast({txt:e.message}).show();
+          });
+        });
+      }catch(e){
+        console.log('Plus只能运行手机设备');
+      }
+		},
+		toSize: function(f) {
+			let _self = this;
+			let kb = (f / 1024).toFixed(2);
+			if(kb < 1024) {
+				kb = kb + ' KB';
+			} else if(kb >= 1024 && kb < 1048576) {
+				kb = (kb / 1024).toFixed(2) + ' M';
+			} else if(kb >= 1048576 && kb < 1073741824) {
+				kb = (kb / 1024 / 1024).toFixed(2) + ' G';
+			}
+			_self.meInfo.cache.info = kb;
+		},
 
     /* 退出登陆 */
     logout(){

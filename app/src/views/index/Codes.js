@@ -38,7 +38,7 @@ export default {
     back(){
       this.$router.go(-1);
       // 关闭扫码
-      this.scan.close();
+      if(this.scan) this.scan.close();
     }
   },
 }

@@ -128,12 +128,12 @@
             <cube-swipe>
               <!-- List -->
               <ul class="me_list">
-                <li>
+                <li @click="$router.push('/user/info')">
                   <span class="ico" :style="{backgroundImage: 'url('+require('./assets/user/info.png')+')'}"></span>
                   <span class="title">个人资料</span>
                   <i class="cubeic-arrow"></i>
                 </li>
-                <li>
+                <li @click="$router.push('/user/passwd')">
                   <span class="ico" :style="{backgroundImage: 'url('+require('./assets/user/passwd.png')+')'}"></span>
                   <span class="title">修改密码</span>
                   <i class="cubeic-arrow"></i>
@@ -160,19 +160,19 @@
                 <li>
                   <span class="ico" :style="{backgroundImage: 'url('+require('./assets/user/tel.png')+')'}"></span>
                   <span class="title">用户反馈</span>
-                  <i class="cubeic-arrow"></i>
+                  <!-- <i class="cubeic-arrow"></i> -->
                   <span class="info">{{meInfo.tel}}</span>
                 </li>
-                <li>
-                  <span class="ico" :style="{backgroundImage: 'url('+require('./assets/user/amount.png')+')'}"></span>
+                <li @click="clearCache()">
+                  <span class="ico" :style="{backgroundImage: 'url('+require('./assets/user/clear.png')+')'}"></span>
                   <span class="title">清理缓存</span>
-                  <i class="cubeic-arrow"></i>
-                  <span class="info">{{meInfo.version}}</span>
+                  <!-- <i class="cubeic-arrow"></i> -->
+                  <span class="info">{{meInfo.cache.info}}</span>
                 </li>
                 <li>
                   <span class="ico" :style="{backgroundImage: 'url('+require('./assets/user/system.png')+')'}"></span>
                   <span class="title">系统信息</span>
-                  <i class="cubeic-arrow"></i>
+                  <!-- <i class="cubeic-arrow"></i> -->
                   <span class="info">{{meInfo.version}}</span>
                 </li>
               </ul>
