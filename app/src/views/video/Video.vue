@@ -16,8 +16,12 @@
           <cube-form :model="formData" class="cube-form_groups">
             <cube-form-group legend="录制视频">
               <ul class="upload">
-                <li class="upload_img"><i>x</i></li>
-                <li class="upload_an">+</li>
+                <li class="upload_img"><i>x</i><div>30%</div></li>
+                <li class="upload_img"><i>x</i><div>30%</div></li>
+                <li class="upload_img"><i>x</i><div>30%</div></li>
+                <li class="upload_img"><i>x</i><div>30%</div></li>
+                <li class="upload_img"><i>x</i><div>30%</div></li>
+                <li class="upload_an" @click="addVideo()">+</li>
               </ul>
             </cube-form-group>
             <cube-form-group legend="基本信息">
@@ -56,10 +60,12 @@
 .video_img{text-align: center; background-color: #FFF; background-size: 100% auto; background-repeat: no-repeat;}
 .video_img img{width: 100%;}
 
-.upload{overflow: hidden; background-color: #f3f4f5;}
+.upload{overflow: hidden; background-color: #f3f4f5; padding: 0 5px;}
 .upload li{float: left; width: 25%; height: 60px; box-sizing: border-box; border: #F2F4F6 5px solid; background-color: #FFF;}
 .upload_img{text-align: right;}
-.upload_img i{position: absolute; font-style: normal; text-align: center; width: 24px; height: 24px; margin: -8px 0 0 -18px; background-color: rgba(255,0,0,0.6); color: #FFF; border-radius: 50%;}
+.upload_img div{text-align: center; line-height: 50px; background-color: rgba(37,38,45,.4); color: #333;}
+.upload_img i{position: absolute; font-style: normal; text-align: center; width: 24px; height: 24px; margin: -8px 0 0 -18px; background-color: #6FB737; color: #FFF; border-radius: 50%;}
+.upload_img i:active{background-color: #FF6600;}
 .upload_an{font-size: 32px; line-height: 45px; text-align: center;}
 .upload_an:active{background-color: #F2F4F6;}
 

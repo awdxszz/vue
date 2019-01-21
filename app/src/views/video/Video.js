@@ -9,8 +9,10 @@ export default {
       scroll:{
         video:{events: ['scroll'],options:{pullDownRefresh: {threshold: 60,stop: 40,txt: '已更新'}}},
       },
+      // 录音
+      audio:null,
       // 表单数据
-      formData:{img:'',title:'',ctime:'',addr:'',name:'',tel:'',sex:'',birthday:'',education:'',remark:''},
+      formData:{img:'',video:[],title:'',ctime:'',addr:'',name:'',tel:'',sex:'',birthday:'',education:'',remark:''},
       formField:[
         {type:'input',label:'标题',modelKey: 'title',props:{placeholder: '请输入'},rules: {required: true},trigger: 'blur'},
         {type:'Date',label:'时间',modelKey: 'ctime',rules: {required: true}},
@@ -71,6 +73,19 @@ export default {
       this.$inc.compressImage(file,{width: 448,height: 252},function(imgBase64) {
         _self.formData.img = imgBase64;
       });
+    },
+
+    /* 录制视频 */
+    addVideo(){
+      // if(this.audio){
+      //   this.audio.stop();
+      //   this.audio = null;
+      // }else{
+      //   this.audio = plus.audio.getRecorder();
+      //   this.$inc.audio(this.audio,function(file){
+      //     console.log(file);
+      //   });
+      // }
     },
 
     /* 采访时间 */

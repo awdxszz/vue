@@ -206,24 +206,15 @@ export default {
       if(-y>=0 && -y<=100) this.scroll.index.color = (-y/100).toFixed(2);
     },
 
-    /* 系统缓存 */
+    /* 缓存-清除 */
 		clearCache: function() {
-      var _self = this;
-      try{
-        plus.io.resolveLocalFileSystemURL('_doc/', function(entry) {
-          entry.removeRecursively();
-          _self.$createToast({txt:'清除成功'}).show();
-          _self.meInfo.cache.info = '0 KB';
-
-        }, function(e) {
-          _self.$createToast({txt:'清除文件失败'}).show();
-        });
-      }catch(e){
-        _self.$createToast({txt:'Plus只能运行手机设备'}).show();
-      }
-		},
+      this.$inc.cacheClear();
+      this.$createToast({txt:'清除成功'}).show();
+      this.meInfo.cache.info = '0 KB';
+    },
+    /* 缓存-大小 */
 		getDrcSize: function() {
-			this.meInfo.cache.size = 0;
+      this.meInfo.cache.size = 0;
 			this.getSize('_doc/');
 		},
 		getSize: function(d) {

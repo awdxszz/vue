@@ -20,12 +20,12 @@ export default function install(Vue){
   Vue.prototype.$inc = {
     
     /* Token */
-    token:function(){
+    token(){
       return Vue.prototype.$storage.getItem('token');
     },
 
     /* 设备检测 */
-    os:function(){
+    os(){
       let u = navigator.userAgent;
       let os = '';
       if(u.indexOf('Android') > -1 || u.indexOf('Linux') > -1){
@@ -41,28 +41,28 @@ export default function install(Vue){
     },
 
     /* 定位 */
-    geolocation: function(callback){
+    geolocation(callback){
       try{
         plus.geolocation.watchPosition(callback);
       }catch(e){console.log('定位');}
     },
 
     /* 拍照 */
-    camera: function(callback){
+    camera(callback){
       try{
         let camera = plus.camera.getCamera();
-        camera.captureImage(function(ImageUrl){
-          plus.io.resolveLocalFileSystemURL(ImageUrl, function (entry) {
+        camera.captureImage(function(url){
+          plus.io.resolveLocalFileSystemURL(url, function (entry) {
             callback(entry.fullPath);
           },function (e) {
-            console.log("存储拍照文件失败");
+            console.log("读取拍照失败");
           });
         },function(e){console.log('已取消');});
       }catch(e){console.log('拍照');}
     },
 
     /* 相册 */
-    photo: function(callback){
+    photo(callback){
       try{
         plus.gallery.pick(function(paths){
           callback(paths);
@@ -70,8 +70,35 @@ export default function install(Vue){
       }catch(e){console.log('相册');}
     },
 
+    /* 录像 */
+    video(callback){
+      try{
+        let camera = plus.camera.getCamera();
+        camera.startVideoCapture(function(url) {
+          plus.io.resolveLocalFileSystemURL(url, function (entry) {
+            callback(entry.fullPath);
+          },function (e) {
+            console.log("读取录像失败");
+          });
+        },function(e){console.log('已取消');});
+      }catch(e){console.log('录像');}
+    },
+
+    /* 音频 */
+    audio(r,callback){
+      try{
+        r.record({filename: '_doc/audio/'}, function(url) {
+          plus.io.resolveLocalFileSystemURL(url, function (entry) {
+            callback(entry.fullPath);
+          },function (e) {
+            console.log("读取音频失败");
+          });
+        },function(e){console.log('已取消');});
+      }catch(e){console.log('录音');}
+    },
+
     /* 压缩图片 */
-    compressImage: function(file,parm,callback){
+    compressImage(file,parm,callback){
       // 默认
       let imageWidth = 0;
       let imageHeight = 0;
@@ -105,6 +132,17 @@ export default function install(Vue){
         let data = canvas.toDataURL('image/jpeg');
         callback(data);
       }
+    },
+
+    /* 系统缓存 */
+    cacheClear(){
+      try{
+        plus.io.resolveLocalFileSystemURL('_doc/', function(entry) {
+          return entry.removeRecursively();
+        }, function(e) {
+          console.log('清理缓存失败');
+        });
+      }catch(e){console.log('清理缓存');}
     },
 
   }
