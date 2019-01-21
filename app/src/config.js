@@ -40,6 +40,72 @@ export default function install(Vue){
       return os;
     },
 
-  }
+    /* 定位 */
+    geolocation: function(callback){
+      try{
+        plus.geolocation.watchPosition(callback);
+      }catch(e){console.log('定位');}
+    },
 
+    /* 拍照 */
+    camera: function(callback){
+      try{
+        let camera = plus.camera.getCamera();
+        camera.captureImage(function(ImageUrl){
+          plus.io.resolveLocalFileSystemURL(ImageUrl, function (entry) {
+            callback(entry.fullPath);
+          },function (e) {
+            console.log("存储拍照文件失败");
+          });
+        },function(e){console.log('已取消');});
+      }catch(e){console.log('拍照');}
+    },
+
+    /* 相册 */
+    photo: function(callback){
+      try{
+        plus.gallery.pick(function(paths){
+          callback(paths);
+        });
+      }catch(e){console.log('相册');}
+    },
+
+    /* 压缩图片 */
+    compressImage: function(file,parm,callback){
+      // 默认
+      let imageWidth = 0;
+      let imageHeight = 0;
+      let offsetX = 0;
+      let offsetY = 0;
+      let canvas = document.createElement('canvas');
+      let context = canvas.getContext('2d');
+      let w = 420;
+      let h = 560;
+      if(parm.width) w = parm.width;
+      if(parm.height) h = parm.height;
+      let img = new Image();
+      img.src = file;
+      img.onload = function () {
+        // 等比例缩放
+        if (this.width > this.height) {
+            imageWidth = w;
+            imageHeight = Math.round(w*this.height/this.width);
+        }else{
+            imageWidth = w;
+            imageHeight = Math.round(w*this.height/this.width);
+        }
+        // 是否裁切
+        if(h>0){
+            offsetY = - Math.round((imageHeight-h)/2);
+        }
+        // 画板高宽
+        canvas.width = imageWidth;
+        canvas.height = h?h:imageHeight;
+        context.drawImage(this, offsetX, offsetY, imageWidth, imageHeight);
+        let data = canvas.toDataURL('image/jpeg');
+        callback(data);
+      }
+    },
+
+  }
 }

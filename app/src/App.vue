@@ -212,6 +212,7 @@ html,body,#app{overflow: hidden; width: 100%; height: 100%;}
 #app{position: absolute; z-index: 1; left: 0; top: 0; color: #333; font-size: 14px; font-family: 'Avenir', Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;}
 #Index{height: 100%;}
 a{text-decoration: none; color: #333;}
+img{border: none; vertical-align: top;}
 ul{list-style: none;}
 
 /* 翻页效果 */

@@ -27,12 +27,7 @@ export default {
   mounted(){
     let _self = this;
     // 插件
-    document.addEventListener('plusready', function(){
-      // 定位
-      plus.geolocation.watchPosition(function(p){
-        _self.formData.addr = p.address.country+p.address.province+p.address.city+p.address.district+p.addresses;
-      });
-    }, false);
+    document.addEventListener('plusready',this.loadData(), false);
   },
   methods:{
 
@@ -40,6 +35,42 @@ export default {
     videoDown(){
       // 加载数据
       this.$refs.videoScroll.forceUpdate();
+    },
+
+    /* 加载数据 */
+    loadData(){
+      let _self = this;
+        // 定位地址
+        this.$inc.geolocation(function(p){
+          _self.formData.addr = p.address.country+p.address.province+p.address.city+p.address.district+p.addresses;
+        });
+    },
+
+    /* 封面图 */
+    selectImg(){
+      let _self = this;
+      this.$createActionSheet({
+        title: '封面图',active: 0,
+        data: [{content:'拍照'},{content:'相册'}],
+        onSelect: (item, index)=>{
+          if(index==0){
+            _self.$inc.camera(function(file){
+              _self.compress(file);
+            });
+          }else if(index==1){
+            _self.$inc.photo(function(file){
+              _self.compress(file);
+            });
+          }
+        }
+      }).show();
+    },
+    // 压缩图片
+    compress(file){
+      let _self = this;
+      this.$inc.compressImage(file,{width: 448,height: 252},function(imgBase64) {
+        _self.formData.img = imgBase64;
+      });
     },
 
     /* 采访时间 */

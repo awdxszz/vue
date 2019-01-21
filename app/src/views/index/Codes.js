@@ -14,6 +14,7 @@ export default {
     document.addEventListener('plusready', this.getScan(), false);
   },
   methods:{
+    
     /* 扫描二维码 */
     getScan(){
       let _self = this;
@@ -29,9 +30,7 @@ export default {
         }
         // 打开
         this.scan.start();
-      }catch(e){
-        console.log('Plus只能运行手机设备');
-      }
+      }catch(e){console.log('扫码');}
     },
 
     /* 返回 */

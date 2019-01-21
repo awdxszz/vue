@@ -247,7 +247,7 @@ export default {
           });
         });
       }catch(e){
-        console.log('Plus只能运行手机设备');
+        console.log('缓存文件');
       }
 		},
 		toSize: function(f) {

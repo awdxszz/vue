@@ -12,7 +12,7 @@ export default {
       // 表单数据
       formData:{nickname:'',name:'',sex:'',birthday:'',sign:''},
       formField:[
-        {type:'input',label:'昵称',modelKey: 'nickname',props:{placeholder: '请输入'},rules: {required: true},trigger: 'blur'},
+        {type:'input',label:'昵称',modelKey: 'nickname',props:{placeholder: '请输入昵称'},rules: {required: true},trigger: 'blur'},
         {type:'input',label:'姓名',modelKey: 'name',props:{placeholder: '请输入姓名'}},
         {type:'select',label:'性别',modelKey: 'sex',props:{options: ['男','女']}},
         {type:'select',label:'生日',modelKey: 'birthday'},

@@ -24,26 +24,19 @@ export default {
     /* 定位 */
     geolocation(){
       let _self = this;
-      try{
-        // 定位更新
-        plus.geolocation.watchPosition(function(p){
-          // console.log(JSON.stringify(p));
-          // 数据
-          _self.mapInfo = {
-            city:p.address.city,
-            area:p.address.country+p.address.province+p.address.city+p.address.district,
-            addr:p.addresses,
-            longitude:p.coords.longitude,
-            latitude:p.coords.latitude,
-          }
-          // 标记地图
-          _self.getMaps(p.coords.longitude,p.coords.latitude);
-        },function(e){
-          console.log('定位失败:'+e.message);
-        });
-      }catch(e){
-        console.log('Plus只能运行手机设备');
-      }
+      // 定位更新
+      this.$inc.geolocation(function(p){
+        // 数据
+        _self.mapInfo = {
+          city:p.address.city,
+          area:p.address.country+p.address.province+p.address.city+p.address.district,
+          addr:p.addresses,
+          longitude:p.coords.longitude,
+          latitude:p.coords.latitude,
+        }
+        // 标记地图
+        _self.getMaps(p.coords.longitude,p.coords.latitude);
+      });
     },
     // 获取地图
     getMaps(longitude,latitude){
