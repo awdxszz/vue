@@ -8,8 +8,8 @@ export default function install(Vue){
     name:'WebMIS',
     version: '0.0.1',
     link_name: 'WebMIS',
-    // apiUrl: 'http://192.168.1.88:9091/api/',
-    apiUrl: 'http://vue.webmis.vip/api/',
+    apiUrl: 'http://192.168.1.88:9091/api/',
+    // apiUrl: 'http://vue.webmis.vip/api/',
     map_key: 'c526dde052bd47c221103ae04176cc3c',
   }
 
@@ -53,7 +53,7 @@ export default function install(Vue){
         let camera = plus.camera.getCamera();
         camera.captureImage(function(url){
           plus.io.resolveLocalFileSystemURL(url, function (entry) {
-            callback(entry.fullPath);
+            callback(url,entry);
           },function (e) {
             console.log("读取拍照失败");
           });
@@ -76,7 +76,7 @@ export default function install(Vue){
         let camera = plus.camera.getCamera();
         camera.startVideoCapture(function(url) {
           plus.io.resolveLocalFileSystemURL(url, function (entry) {
-            callback(entry.fullPath);
+            callback(url,entry);
           },function (e) {
             console.log("读取录像失败");
           });
@@ -89,7 +89,7 @@ export default function install(Vue){
       try{
         r.record({filename: '_doc/audio/'}, function(url) {
           plus.io.resolveLocalFileSystemURL(url, function (entry) {
-            callback(entry.fullPath);
+            callback(url,entry);
           },function (e) {
             console.log("读取音频失败");
           });
@@ -132,6 +132,22 @@ export default function install(Vue){
         let data = canvas.toDataURL('image/jpeg');
         callback(data);
       }
+    },
+
+    /* 上传文件 */
+    uploader(url,data,callback,progress){
+      try{
+        let task = plus.uploader.createUpload(url,{method:"POST"},callback);
+        for(let i=0; i<data.length; i++){
+          if(data[i].type=='file'){
+            let res = task.addFile(data[i].val,{key:data[i].key});
+          }else if(data[i].type=='data'){
+            task.addData(data[i].key, data[i].val);
+          }
+        }
+        task.addEventListener( "statechanged",progress,false);
+        task.start();
+      }catch(e){console.log('上传文件');}
     },
 
     /* 系统缓存 */

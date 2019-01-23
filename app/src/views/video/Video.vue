@@ -16,11 +16,10 @@
           <cube-form :model="formData" class="cube-form_groups">
             <cube-form-group legend="录制视频">
               <ul class="upload">
-                <li class="upload_img"><i>x</i><div>30%</div></li>
-                <li class="upload_img"><i>x</i><div>30%</div></li>
-                <li class="upload_img"><i>x</i><div>30%</div></li>
-                <li class="upload_img"><i>x</i><div>30%</div></li>
-                <li class="upload_img"><i>x</i><div>30%</div></li>
+                <li class="upload_img" v-for="(val,index) in formData.video" :key="index">
+                  <i @click="removeVideo(index)" v-if="val.del">x</i>
+                  <div>{{val.loading}}%</div>
+                </li>
                 <li class="upload_an" @click="addVideo()">+</li>
               </ul>
             </cube-form-group>

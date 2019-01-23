@@ -9,7 +9,7 @@ export default {
       scroll:{
         video:{events: ['scroll'],options:{pullDownRefresh: {threshold: 60,stop: 40,txt: '已更新'}}},
       },
-      // 录音
+      // 视频
       audio:null,
       // 表单数据
       formData:{img:'',video:[],title:'',ctime:'',addr:'',name:'',tel:'',sex:'',birthday:'',education:'',remark:''},
@@ -77,6 +77,28 @@ export default {
 
     /* 录制视频 */
     addVideo(){
+      let _self = this;
+      let video = [{src:'',file:'',loading:0,del:false}];
+      // 追加
+      _self.formData.video.push.apply(_self.formData.video,video);
+      // 拍摄
+      let n = _self.formData.video.length;
+      _self.formData.video[n-1].obj = this.$inc.video(function(file){
+        // 表单数据
+        let data = [
+          {type:'data',key:'token',val:_self.$inc.token()},
+          {type:'file',key:'up',val:file}
+        ];
+        // 上传视频
+        _self.$inc.uploader(_self.$config.apiUrl+'UserVideo/video',data,function(res){
+          let d = JSON.parse(res.responseText);
+          _self.formData.video[n-1].del = true;
+          _self.formData.video[n-1].src = d.data.src;
+          _self.formData.video[n-1].file = d.data.file;
+        },function(up){
+          _self.formData.video[n-1].loading = (up.uploadedSize/up.totalSize*100).toFixed(0); 
+        });
+      });
       // if(this.audio){
       //   this.audio.stop();
       //   this.audio = null;
@@ -86,6 +108,22 @@ export default {
       //     console.log(file);
       //   });
       // }
+    },
+    // 删除视频
+    removeVideo(n){
+      let data = this.formData.video;
+      if(data[n].file){
+        this.$ajax.post(
+          this.$config.apiUrl+'UserVideo/videoDel',
+          'token='+this.$inc.token()+'&file='+data[n].file
+        ).then(function(res){
+          _self.$createToast({txt:res.msg}).show();
+        }).catch(function(e){
+          _self.$createToast({txt:'网络加载失败，请重试'}).show();
+        });
+      }
+      // 移除
+      data.splice(n,1);
     },
 
     /* 采访时间 */
