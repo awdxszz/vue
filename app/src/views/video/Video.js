@@ -12,18 +12,20 @@ export default {
       // 视频
       audio:null,
       // 表单数据
-      formData:{img:'',video:[],title:'',ctime:'',addr:'',name:'',tel:'',sex:'',birthday:'',education:'',remark:''},
+      formData:{img:'',upload:[],title:'',ctime:'',addr:'',name:'',tel:'',sex:'',birthday:'',education:'',remark:''},
       formField:[
-        {type:'input',label:'标题',modelKey: 'title',props:{placeholder: '请输入'},rules: {required: true},trigger: 'blur'},
+        {type:'input',label:'标题',modelKey: 'title',props:{placeholder: '请输入专题名称'},rules: {required: true},trigger: 'blur'},
         {type:'Date',label:'时间',modelKey: 'ctime',rules: {required: true}},
         {type:'input',label:'采访地点',modelKey: 'addr',props:{placeholder: '定位地址'},rules: {required: true}},
         {type:'input',label:'姓名',modelKey: 'name',props:{placeholder: '请输入姓名'},rules: {required: true},trigger: 'blur'},
         {type:'input',label:'电话',modelKey: 'tel',props:{placeholder: '请输入手机号码'},rules: {required: true},trigger: 'blur'},
         {type:'select',label:'性别',modelKey: 'sex',props:{options: ['男','女']},rules: {required: true}},
         {type:'select',label:'生日',modelKey: 'birthday',rules: {required: true}},
-        {type:'select',label:'文化程度',modelKey: 'education',props:{options: ['博士','硕士','本科','高中','初中','其他']},rules: {required: true}},
+        {type:'select',label:'文化程度',modelKey: 'education',props:{options: ['博士','硕士','本科','大专','高中','初中','其他']},rules: {required: true}},
         {type:'textarea',label:'备注',modelKey: 'remark',props:{placeholder: '填写备注'}},
       ],
+      // 提交按钮
+      subStatus:{dis:false,text:'提交'}
     }
   },
   mounted(){
@@ -48,6 +50,43 @@ export default {
         });
     },
 
+    /* 提交 */
+    submit(){
+      let _self = this;
+      if(this.formData.upload.length>0 && this.formData.img){
+        // 按钮
+        this.subStatus.dis = true;
+        this.subStatus.text = '提交中...';
+        // AJAX
+        let data = JSON.stringify(this.formData);
+        this.$ajax.post(
+          this.$config.apiUrl+'UserVideo/add',
+          'token='+this.$inc.token()+'&type=0&data='+data
+        ).then(function(res){
+          res = res.data;
+          if(res.code!=0){
+            _self.$createToast({txt:res.msg}).show();
+            // 按钮
+            _self.subStatus.dis = false;
+            _self.subStatus.text = '重试';
+          }else{
+            _self.$createToast({txt:res.msg}).show();
+            // 按钮
+            _self.subStatus.dis = true;
+            _self.subStatus.text = '完成';
+          }
+        }).catch(function(e){
+          _self.$createToast({txt:'网络加载失败，请重试'}).show();
+        });
+      }else{
+        _self.$createToast({txt:'请上传封面图、视频！'}).show();
+        // 按钮
+        _self.subStatus.dis = false;
+        _self.subStatus.text = '重试';
+      }
+      return false;
+    },
+
     /* 封面图 */
     selectImg(){
       let _self = this;
@@ -56,8 +95,8 @@ export default {
         data: [{content:'拍照'},{content:'相册'}],
         onSelect: (item, index)=>{
           if(index==0){
-            _self.$inc.camera(function(file){
-              _self.compress(file);
+            _self.$inc.camera(function(file,entry){
+              _self.compress(entry.fullPath);
             });
           }else if(index==1){
             _self.$inc.photo(function(file){
@@ -78,12 +117,12 @@ export default {
     /* 录制视频 */
     addVideo(){
       let _self = this;
-      let video = [{src:'',file:'',loading:0,del:false}];
+      let upload = [{src:'',file:'',loading:0,del:false}];
       // 追加
-      _self.formData.video.push.apply(_self.formData.video,video);
+      _self.formData.upload.push.apply(_self.formData.upload,upload);
       // 拍摄
-      let n = _self.formData.video.length;
-      _self.formData.video[n-1].obj = this.$inc.video(function(file){
+      let n = _self.formData.upload.length;
+      _self.formData.upload[n-1].obj = this.$inc.video(function(file){
         // 表单数据
         let data = [
           {type:'data',key:'token',val:_self.$inc.token()},
@@ -91,12 +130,16 @@ export default {
         ];
         // 上传视频
         _self.$inc.uploader(_self.$config.apiUrl+'UserVideo/video',data,function(res){
-          let d = JSON.parse(res.responseText);
-          _self.formData.video[n-1].del = true;
-          _self.formData.video[n-1].src = d.data.src;
-          _self.formData.video[n-1].file = d.data.file;
+          res = JSON.parse(res.responseText);
+          if(res.code!=0){
+            _self.$createToast({txt:res.msg}).show();
+          }else{
+            _self.formData.upload[n-1].del = true;
+            _self.formData.upload[n-1].src = res.data.src;
+            _self.formData.upload[n-1].file = res.data.file;
+          }
         },function(up){
-          _self.formData.video[n-1].loading = (up.uploadedSize/up.totalSize*100).toFixed(0); 
+          _self.formData.upload[n-1].loading = (up.uploadedSize/up.totalSize*100).toFixed(0); 
         });
       });
       // if(this.audio){
@@ -111,7 +154,7 @@ export default {
     },
     // 删除视频
     removeVideo(n){
-      let data = this.formData.video;
+      let data = this.formData.upload;
       if(data[n].file){
         this.$ajax.post(
           this.$config.apiUrl+'UserVideo/videoDel',

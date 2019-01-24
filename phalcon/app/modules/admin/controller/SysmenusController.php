@@ -37,8 +37,6 @@ class SysMenusController extends UserBase {
     $key = trim($this->request->getPost('key'));
     if(!$key || empty($key)) return self::getJSON(['code'=>40000,'msg'=>'没有数据！']);
     // 数据处理
-    $data = json_decode($key);
-    // 数据处理
     $model = new SysMenu();
     $data = json_decode($key);
     foreach($data as $key=>$val){

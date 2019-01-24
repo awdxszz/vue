@@ -13,10 +13,10 @@
           <div class="video_img" @click="selectImg()">
             <img :src="formData.img?formData.img:require('../../assets/index/img.jpg')" />
           </div>
-          <cube-form :model="formData" class="cube-form_groups">
+          <cube-form :model="formData" @submit="submit" class="cube-form_groups">
             <cube-form-group legend="录制视频">
               <ul class="upload">
-                <li class="upload_img" v-for="(val,index) in formData.video" :key="index">
+                <li class="upload_img" v-for="(val,index) in formData.upload" :key="index">
                   <i @click="removeVideo(index)" v-if="val.del">x</i>
                   <div>{{val.loading}}%</div>
                 </li>
@@ -41,7 +41,7 @@
               <cube-form-item :field="formField[8]"></cube-form-item>
             </cube-form-group>
             <cube-form-group>
-              <cube-button type="submit">提交</cube-button>
+              <cube-button type="submit" :disabled="subStatus.dis">{{subStatus.text}}</cube-button>
             </cube-form-group>
           </cube-form>
           <!-- 底线 -->
