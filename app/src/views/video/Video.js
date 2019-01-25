@@ -44,14 +44,14 @@ export default {
     /* 加载数据 */
     loadData(){
       let _self = this;
-        // 定位地址
-        this.$inc.geolocation(function(p){
-          _self.formData.addr = p.address.country+p.address.province+p.address.city+p.address.district+p.addresses;
-        });
+      // 定位地址
+      this.$inc.geolocation(function(p){
+        _self.formData.addr = p.address.country+p.address.province+p.address.city+p.address.district+p.addresses;
+      });
     },
 
     /* 提交 */
-    submit(){
+    submitData(){
       let _self = this;
       if(this.formData.upload.length>0 && this.formData.img){
         // 按钮
@@ -109,7 +109,7 @@ export default {
     // 压缩图片
     compress(file){
       let _self = this;
-      this.$inc.compressImage(file,{width: 448,height: 252},function(imgBase64) {
+      this.$inc.compressImage(file,{width: 746, height: 420},function(imgBase64) {
         _self.formData.img = imgBase64;
       });
     },

@@ -67,9 +67,9 @@ class UserVideoController extends UserBase{
     }
   }
 
-  /* 上传视频 */
+  /* 视频 */
   function videoAction(){
-    // 保存视频
+    // 保存
     $up = self::upload(self::$videoDir);
     if($up['status']){
       return self::getJSON([
@@ -91,10 +91,59 @@ class UserVideoController extends UserBase{
     return self::getJSON(['code'=>0,'msg'=>'删除成功']);
   }
 
+  /* 音频 */
+  function audioAction(){
+    // 保存
+    $up = self::upload(self::$audioDir);
+    if($up['status']){
+      return self::getJSON([
+        'code'=>0,
+        'msg'=>$up['msg'],
+        'data'=>[
+          'src'=>Inc::BaseUrl(self::$audioDir.$up['file']),
+          'file'=>$up['file']
+        ]
+      ]);
+    }else{
+      return self::getJSON(['code'=>50001,'msg'=>$up['msg']]);
+    }
+  }
+  /* 删除音频 */
+  function audioDelAction(){
+    $file = trim($this->request->getPost('file'));
+    unlink(self::$audioDir.$file);
+    return self::getJSON(['code'=>0,'msg'=>'删除成功']);
+  }
+
+  /* 拍照 */
+  function photoAction(){
+    $base64 = trim($this->request->getPost('up'));
+    // 保存
+    $up = self::uploadBase64(self::$photoDir,str_replace(' ','+',$base64));
+    if($up['status']){
+      return self::getJSON([
+        'code'=>0,
+        'msg'=>$up['msg'],
+        'data'=>[
+          'src'=>Inc::BaseUrl(self::$photoDir.$up['file']),
+          'file'=>$up['file']
+        ]
+      ]);
+    }else{
+      return self::getJSON(['code'=>50001,'msg'=>$up['msg']]);
+    }
+  }
+  /* 删除音频 */
+  function photoDelAction(){
+    $file = trim($this->request->getPost('file'));
+    unlink(self::$photoDir.$file);
+    return self::getJSON(['code'=>0,'msg'=>'删除成功']);
+  }
+
   // 上传处理
   private function upload($path){
     $upName = 'up';
-		$type = ['jpg','png','gif','mov'];
+		$type = ['jpg','png','gif','mov','mp4','wav','mp3'];
 		$ext = substr(strrchr($_FILES[$upName]['name'],'.'),1);
     $file = date('YmdHis').rand(1000,9999).'.'.$ext;
     if(in_array($ext,$type)){
