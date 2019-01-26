@@ -13,6 +13,89 @@ class UserVideoController extends UserBase{
   static private $audioDir = 'upload/audio/';
   static private $photoDir = 'upload/photo/';
 
+  /* 列表 */
+  function listAction(){
+    self::getJSON();
+    $page = trim($this->request->getPost('page'));
+    $limit = trim($this->request->getPost('limit'));
+    $key = trim($this->request->getPost('key'));
+    $uid = trim($this->request->getPost('uid'));
+    $type = trim($this->request->getPost('type'));
+    // 查询条件
+    $where = '(title like "%'.$key.'%" or name like "%'.$key.'%" or tel like "%'.$key.'%")';
+    if($uid) $where .= ' and user_id="'.$uid.'"';
+    if($type) $where .= ' and type="'.$type.'"';
+    // 查询
+    $start = ($page-1)*$limit;
+    $list = WebVideo::find([
+      $where,
+      'columns'=>'id,type,title,name,tel,addr,img',
+      'order'=>'id desc',
+      'limit'=>['number'=>$limit,'offset'=>$start]
+    ]);
+    // 数据
+    $data = [];
+    foreach($list as $key=>$val){
+      $val->img=Inc::BaseUrl(self::$imgDir.$val->img);
+      $data[] = [
+        'item'=>$val,
+        'btns'=>[
+          ['action'=>'tel','text'=>'联系客户','color'=>'#A2A4A6','val'=>$val->tel],
+          ['action'=>'send','text'=>'删除','color'=>'#FF0000','val'=>$val->id]
+        ]
+      ];
+    }
+    return self::getJSON(['code'=>0,'data'=>$data,'msg'=>'查询结果']);
+  }
+
+  /* 详情 */
+  function showAction(){
+    $id = trim($this->request->getPost('id'));
+    if(!$id || empty($id) || !is_numeric($id)) return self::getJSON(['code'=>40000,'msg'=>'没有数据！']);
+    // 查询
+    $one = WebVideo::findFirst($id);
+    // 上传内容
+    $upload = json_decode($one->upload);
+    $up = [];
+    foreach($upload as $val){
+      if($one->type==0) $up[]=Inc::BaseUrl(self::$videoDir.$val);
+      elseif($one->type==1) $up[]=Inc::BaseUrl(self::$audioDir.$val);
+      elseif($one->type==2) $up[]=Inc::BaseUrl(self::$photoDir.$val);
+    }
+    // 结果
+    return self::getJSON(['code'=>0,'data'=>[
+      'type'=>$one->type,
+      'title'=>$one->title,
+      'upload'=>$up,
+      'info'=>[
+        [
+          'title'=>'基本信息',
+          'items'=>[
+            ['name'=>'标题','value'=>$one->title],
+            ['name'=>'日期','value'=>date('Y-m-d',$one->ctime)],
+            ['name'=>'地点','value'=>$one->addr],
+          ]
+        ],
+        [
+          'title'=>'个人信息',
+          'items'=>[
+            ['name'=>'姓名','value'=>$one->name],
+            ['name'=>'电话','value'=>$one->tel],
+            ['name'=>'性别','value'=>$one->sex],
+            ['name'=>'生日','value'=>$one->birthday],
+            ['name'=>'文化程度','value'=>$one->education],
+          ]
+        ],
+        [
+          'title'=>'其它',
+          'items'=>[
+            ['name'=>'备注','value'=>$one->remark],
+          ]
+        ]
+      ]
+    ],'msg'=>'查询结果']);
+  }
+
   /* 添加 */
   function addAction(){
     $token = trim($this->request->getPost('token'));
@@ -64,6 +147,27 @@ class UserVideoController extends UserBase{
       return self::getJSON(['code'=>0,'msg'=>'添加成功！']);
     }else{
       return self::getJSON(['code'=>50000,'msg'=>'添加失败！']);
+    }
+  }
+
+  /* 删除 */
+  function delAction(){
+    $id = trim($this->request->getPost('id'));
+    if(!$id || empty($id) || !is_numeric($id)) return self::getJSON(['code'=>40000,'msg'=>'没有数据！']);
+    // 查询
+    $model = WebVideo::findFirst($id);
+    $upload = json_decode($model->upload);
+    // 删除文件
+    foreach($upload as $val){
+      if($model->type==0) unlink(self::$videoDir.$val);
+      elseif($model->type==1) unlink(self::$audioDir.$val);
+      elseif($model->type==2) unlink(self::$photoDir.$val);
+    }
+    // 删除数据
+    if($model->delete()==true){
+      return self::getJSON(['code'=>0,'msg'=>'删除成功！']);
+    }else{
+      return self::getJSON(['code'=>50000,'msg'=>'删除失败！']);
     }
   }
 

@@ -11,52 +11,52 @@
         <cube-scroll ref="indexScroll" :scroll-events="scroll.index.events" @scroll="scrollHandler" @pulling-down="indexDown" :options="scroll.index.options">
           <!-- Top -->
           <cube-sticky-ele>
-              <header class="header in_header" :style="{backgroundColor:'rgba(111,183,55,'+scroll.index.color+')'}">
-                <span class="text_left" @click="openMap()">昆明市</span>
-                <b>{{$config.name}}</b>
-                <span class="ico_right ico_qr" @click="openBarCode()"></span>
-              </header>
-            </cube-sticky-ele>
-            <!-- 轮播图 -->
-            <cube-slide :data="slideList">
-              <cube-slide-item v-for="(item, index) in slideList" :key="index">
-                <a :href="item.url" :style="{height:'210px',background:'url('+item.image+') no-repeat center center #FFF',backgroundSize: 'auto 100%'}"></a>
-              </cube-slide-item>
-            </cube-slide>
-            <!-- Menus -->
-            <ul class="in_menu">
-              <li v-for="(val,key) in menus" :key="key">
-                <router-link :to="val.url"><span :style="{backgroundImage: 'url('+val.ico+')'}"></span><p>{{val.name}}</p></router-link>
+            <header class="header in_header" :style="{backgroundColor:'rgba(111,183,55,'+scroll.index.color+')'}">
+              <span class="text_left" @click="openMap()">昆明市</span>
+              <b>{{$config.name}}</b>
+              <span class="ico_right ico_qr" @click="openBarCode()"></span>
+            </header>
+          </cube-sticky-ele>
+          <!-- 轮播图 -->
+          <cube-slide :data="slideList">
+            <cube-slide-item v-for="(item, index) in slideList" :key="index">
+              <a :href="item.url" :style="{height:'210px',background:'url('+item.image+') no-repeat center center #FFF',backgroundSize: 'auto 100%'}"></a>
+            </cube-slide-item>
+          </cube-slide>
+          <!-- Menus -->
+          <ul class="in_menu">
+            <li v-for="(val,key) in menus" :key="key">
+              <router-link :to="val.url"><span :style="{backgroundImage: 'url('+val.ico+')'}"></span><p>{{val.name}}</p></router-link>
+            </li>
+          </ul>
+          <!-- 视频 -->
+          <div class="in_ct mtop">
+            <div class="in_title"><span class="line" :style="{backgroundColor:'#6FB737'}"></span><span class="title">视频</span></div>
+            <ul class="in_list">
+              <li v-for="(val,key) in video" :key="key">
+                <div class="ct"><img :src="val.image"><p>{{val.title}}</p></div>
               </li>
             </ul>
-            <!-- 视频 -->
-            <div class="in_ct mtop">
-              <div class="in_title"><span class="line" :style="{backgroundColor:'#6FB737'}"></span><span class="title">视频</span></div>
-              <ul class="in_list">
-                <li v-for="(val,key) in video" :key="key">
-                  <div class="ct"><img :src="val.image"><p>{{val.title}}</p></div>
-                </li>
-              </ul>
-            </div>
-            <!-- 录音 -->
-            <div class="in_ct mtop">
-              <div class="in_title"><span class="line" :style="{backgroundColor:'#FF6600'}"></span><span class="title">录音</span></div>
-              <ul class="in_list">
-                <li v-for="(val,key) in audio" :key="key">
-                  <div class="ct"><img :src="val.image"><p>{{val.title}}</p></div>
-                </li>
-              </ul>
-            </div>
-            <!-- 拍照 -->
-            <div class="in_ct mtop">
-              <div class="in_title"><span class="line" :style="{backgroundColor:'#3385FF'}"></span><span class="title">拍照</span></div>
-              <ul class="in_list">
-                <li v-for="(val,key) in photo" :key="key">
-                  <div class="ct"><img :src="val.image"><p>{{val.title}}</p></div>
-                </li>
-              </ul>
-            </div>
-            <!-- 底线 -->
+          </div>
+          <!-- 录音 -->
+          <div class="in_ct mtop">
+            <div class="in_title"><span class="line" :style="{backgroundColor:'#FF6600'}"></span><span class="title">录音</span></div>
+            <ul class="in_list">
+              <li v-for="(val,key) in audio" :key="key">
+                <div class="ct"><img :src="val.image"><p>{{val.title}}</p></div>
+              </li>
+            </ul>
+          </div>
+          <!-- 拍照 -->
+          <div class="in_ct mtop">
+            <div class="in_title"><span class="line" :style="{backgroundColor:'#3385FF'}"></span><span class="title">拍照</span></div>
+            <ul class="in_list">
+              <li v-for="(val,key) in photo" :key="key">
+                <div class="ct"><img :src="val.image"><p>{{val.title}}</p></div>
+              </li>
+            </ul>
+          </div>
+          <!-- 底线 -->
           <div class="bottom_line"><span>{{$config.link_name}}</span></div>
         </cube-scroll>
       </cube-sticky>
@@ -69,7 +69,7 @@
           <span class="text_left">采访</span>
           <label class="video_sea">
             <i class="ico ico_sea"></i>
-            <input type="text" class="input" placeholder="请输入专题名称" />
+            <input type="text" class="input" placeholder="请输入专题名称" v-model="videoSea.key" v-on:input="search()" />
           </label>
           <span class="ico_right" @click="selectVideo()"><i class="cubeic-add"></i></span>
         </header>
@@ -82,14 +82,14 @@
                 <li class="swipe-item-wrapper" v-for="(data,index) in videoData" :key="data.item.id">
                   <cube-swipe-item ref="swipeItem" :btns="data.btns" :index="index" @btn-click="orderAction" @active="orderOnItem">
                     <!-- 列表内容 -->
-                    <div @click="openOrderShow(data.item.id)" class="ct item-inner">
-                      <div class="img" :style="{backgroundImage:'url('+data.item.image+')'}"></div>
+                    <div @click="videoShow(data.item.id)" class="ct item-inner">
+                      <div class="img" :style="{backgroundImage:'url('+data.item.img+')'}"></div>
                       <div class="text">
                         <h1 class="title">{{data.item.title}}</h1>
                         <dl class="info">
                           <dd>{{data.item.name}}</dd>
                           <dd>{{data.item.tel}}</dd>
-                          <dd class="s">{{data.item.key}}</dd>
+                          <dd class="s">{{data.item.addr}}</dd>
                         </dl>
                       </div>
                     </div>

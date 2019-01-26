@@ -61,16 +61,8 @@ export default {
         {name:'拍照',url:'/video/photo',ico:require('./assets/index/photo.svg')},
       ],
       /* 视频 */
-      videoData:[
-        {
-          item:{id:'201810161723560001',title:'回到明朝当王爷之杨凌传',name:'姓名',tel:'15087738003',key:'蒙面唱将猜猜猜 第三季',image:'http://r1.ykimg.com/050C00005BFE61C8ADA80C3FB0005C6F'},
-          btns:[{action:'tel',text:'编辑信息',color:'#A2A4A6',val:'201810161723560001'},{action:'send',text:'删除',color:'#FF0000',val:'201810161723560001'}]
-        },
-        {
-          item:{id:'201810161723560002',title:'我的保姆手册',name:'姓名',tel:'15087738003',key:'挑战吧!太空',image:'http://r1.ykimg.com/050C00005BFE639FADA80C365B057C86'},
-          btns:[{action:'tel',text:'编辑信息',color:'#A2A4A6',val:'201810161723560002'},{action:'send',text:'删除',color:'#FF0000',val:'201810161723560002'}]
-        },
-      ],
+      videoSea:{key:''},
+      videoData:[],
       // 我的
       uinfo:{
         uname:'',
@@ -89,14 +81,58 @@ export default {
     // 验证Token
     this.$refs.token.token();
     // 加载数据
-    this.loadData();
+    this.loadDataIndex();
+    this.loadDataVideo();
     this.loadDataMe();
   },
   methods:{
 
-    /* 加载数据 */
-    loadData(){
+    /* 下拉刷新-首页 */
+    indexDown(){
+      console.log('AJAX');
+      this.$refs.indexScroll.forceUpdate();
+    },
+    /* 下拉刷新-视频 */
+    videoDown(){
+      // 加载数据
+      this.loadDataVideo();
+    },
+    /* 下拉刷新-我的 */
+    meDown(){
+      this.loadDataMe();
+    },
+
+    /* 加载数据-首页 */
+    loadDataIndex(){
       let _self = this;
+    },
+
+    /* 搜索 */
+    search(){
+      this.loadDataVideo();
+    },
+    /* 加载数据-采访 */
+    loadDataVideo(){
+      let _self = this;
+      let uid = this.$storage.getItem('uid');
+      let page = 1;
+      let limit = 30;
+      // AJAX
+      this.$ajax.post(
+        this.$config.apiUrl+'UserVideo/list',
+        'token='+this.$inc.token()+'&uid='+uid+'&page='+page+'&limit='+limit+'&key='+this.videoSea.key
+      ).then(function(res){
+        let d = res.data;
+        if(d.code!==0){
+          _self.$createToast({txt:res.msg}).show();
+        }else{
+          _self.videoData = d.data;
+        }
+        // 加载动画
+        _self.$refs.videoScroll.forceUpdate();
+      }).catch(function(e){
+        _self.$createToast({txt:'网络加载失败，请重试'}).show();
+      });
     },
 
     /* 加载数据-我的 */
@@ -114,6 +150,8 @@ export default {
           _self.uinfo = d.data;
           _self.uinfo.uname = _self.$storage.getItem('uname');
         }
+        // 加载动画
+        _self.$refs.meScroll.forceUpdate();
       }).catch(function(e){
         _self.$createToast({txt:'网络加载失败，请重试'}).show();
       });
@@ -148,21 +186,31 @@ export default {
       }).show();
     },
     /* 视频-详情 */
-    openOrderShow(id){
-      this.$router.push('/ordershow/'+id);
+    videoShow(id){
+      this.$router.push('/video/show/'+id);
     },
     /* 视频-动作 */
     orderAction(btn, index) {
+      let _self = this;
       if(btn.action === 'tel'){
         window.location.href = 'tel:'+btn.val;
       }else if(btn.action === 'send') {
-        alert(btn.val);
-        // this.$createActionSheet({title: '确认要删除吗',active: 0,
-        //   data: [{content: '删除'}],
-        //   onSelect: () => {
-        //     this.orderData.splice(index, 1);
-        //   }
-        // }).show()
+        this.$createActionSheet({title: '确认要删除吗',active: 0,
+          data: [{content: '删除'}],
+          onSelect: () => {
+            // 提交删除
+            this.$ajax.post(
+              this.$config.apiUrl+'UserVideo/del',
+              'token='+this.$inc.token()+'&id='+btn.val
+            ).then(function(res){
+              let d = res.data;
+              if(d.code!==0) _self.$createToast({txt:res.msg}).show();
+              else _self.videoData.splice(index,1);
+            }).catch(function(e){
+              _self.$createToast({txt:'网络加载失败，请重试'}).show();
+            });
+          }
+        }).show()
       } else {
         // 收缩
         this.$refs.swipeItem[index].shrink()
@@ -173,23 +221,6 @@ export default {
       if (index === this.activeIndex) return false;
       if (this.activeIndex !== -1) this.$refs.swipeItem[this.activeIndex].shrink();
       this.activeIndex = index
-    },
-    
-    /* 下拉刷新-首页 */
-    indexDown(){
-      console.log('AJAX');
-      this.$refs.indexScroll.forceUpdate();
-    },
-    /* 下拉刷新-视频 */
-    videoDown(){
-      // 加载数据
-      this.$refs.videoScroll.forceUpdate();
-    },
-    /* 下拉刷新-我的 */
-    meDown(){
-      // 加载数据
-      this.loadDataMe();
-      this.$refs.meScroll.forceUpdate();
     },
 
     /* 切换菜单 */
