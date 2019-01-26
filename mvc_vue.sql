@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主机： localhost
--- 生成日期： 2019-01-13 20:50:10
--- 服务器版本： 10.1.37-MariaDB
+-- 生成日期： 2019-01-26 19:20:09
+-- 服务器版本： 10.3.12-MariaDB
 -- PHP 版本： 7.3.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -40,7 +40,7 @@ CREATE TABLE `sys_admin` (
   `position` varchar(12) DEFAULT '' COMMENT '职称',
   `rtime` datetime DEFAULT NULL COMMENT '注册时间',
   `state` enum('1','2') NOT NULL DEFAULT '1' COMMENT '状态(1正常,2禁用)',
-  `perm` text COMMENT '权限'
+  `perm` text DEFAULT NULL COMMENT '权限'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -61,10 +61,10 @@ CREATE TABLE `sys_menus` (
   `fid` tinyint(3) UNSIGNED NOT NULL COMMENT '父ID',
   `title` varchar(12) NOT NULL COMMENT '标题',
   `url` varchar(32) DEFAULT '' COMMENT '地址',
-  `perm` int(6) UNSIGNED DEFAULT '0' COMMENT '预设权限',
+  `perm` int(6) UNSIGNED DEFAULT 0 COMMENT '预设权限',
   `ico` varchar(32) DEFAULT '' COMMENT '图标',
   `ctime` datetime DEFAULT NULL COMMENT '创建时间',
-  `sort` tinyint(3) UNSIGNED DEFAULT '0' COMMENT '排序',
+  `sort` tinyint(3) UNSIGNED DEFAULT 0 COMMENT '排序',
   `remark` varchar(32) DEFAULT '' COMMENT '备注'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -134,12 +134,28 @@ CREATE TABLE `web_user` (
   `img` varchar(128) NOT NULL DEFAULT '' COMMENT '头像'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- --------------------------------------------------------
+
 --
--- 转存表中的数据 `web_user`
+-- 表的结构 `web_video`
 --
 
-INSERT INTO `web_user` (`id`, `user_id`, `uname`, `password`, `tel`, `email`, `state`, `ctime`, `name`, `sex`, `birthday`, `nickname`, `img`) VALUES
-(1, '201901131656498288', 'user', 'e10adc3949ba59abbe56e057f20f883e', '15087738003', 'user@163.com', '1', '2019-01-13 00:00:00', '杨文春', '男', '1984-12-17', '测试昵称', 'https://img5.duitang.com/uploads/item/201410/05/20141005082835_2RTzn.thumb.700_0.jpeg');
+CREATE TABLE `web_video` (
+  `id` int(10) UNSIGNED NOT NULL COMMENT 'ID',
+  `user_id` varchar(18) NOT NULL COMMENT '用户ID',
+  `type` enum('0','1','2') NOT NULL DEFAULT '0' COMMENT '类型(1视频,2录音,3照片)',
+  `title` varchar(30) NOT NULL COMMENT '标题',
+  `name` varchar(12) NOT NULL COMMENT '姓名',
+  `sex` enum('','男','女') NOT NULL DEFAULT '' COMMENT '性别',
+  `tel` varchar(11) NOT NULL DEFAULT '' COMMENT '手机',
+  `birthday` int(10) UNSIGNED DEFAULT NULL COMMENT '生日',
+  `education` enum('','博士','硕士','本科','大专','高中','初中','其他') NOT NULL DEFAULT '' COMMENT '学历',
+  `ctime` int(10) DEFAULT NULL COMMENT '创建时间',
+  `img` text NOT NULL DEFAULT '' COMMENT '封面图',
+  `upload` varchar(128) NOT NULL DEFAULT '' COMMENT '上传文件',
+  `addr` varchar(128) NOT NULL DEFAULT '' COMMENT '地址',
+  `remark` varchar(320) NOT NULL DEFAULT '' COMMENT '备注'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- 转储表的索引
@@ -170,6 +186,12 @@ ALTER TABLE `web_user`
   ADD PRIMARY KEY (`id`);
 
 --
+-- 表的索引 `web_video`
+--
+ALTER TABLE `web_video`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- 在导出的表使用AUTO_INCREMENT
 --
 
@@ -195,7 +217,13 @@ ALTER TABLE `sys_menus_action`
 -- 使用表AUTO_INCREMENT `web_user`
 --
 ALTER TABLE `web_user`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID', AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID';
+
+--
+-- 使用表AUTO_INCREMENT `web_video`
+--
+ALTER TABLE `web_video`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID';
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
