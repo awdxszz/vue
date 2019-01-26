@@ -25,7 +25,7 @@ export default {
         {type:'textarea',label:'备注',modelKey: 'remark',props:{placeholder: '填写备注'}},
       ],
       // 提交按钮
-      subStatus:{dis:false,text:'提交'}
+      subStatus:{dis:true,text:'提交'}
     }
   },
   mounted(){
@@ -51,11 +51,14 @@ export default {
     },
 
     /* 提交 */
+    validate(result){
+      this.subStatus.dis = result.valid;
+    },
     submitData(){
       let _self = this;
-      if(this.formData.upload.length>0 && this.formData.img){
+      if(this.subStatus.dis && this.formData.upload.length>0 && this.formData.img){
         // 按钮
-        this.subStatus.dis = true;
+        this.subStatus.dis = false;
         this.subStatus.text = '提交中...';
         // AJAX
         let data = JSON.stringify(this.formData);
@@ -67,22 +70,21 @@ export default {
           if(res.code!=0){
             _self.$createToast({txt:res.msg}).show();
             // 按钮
-            _self.subStatus.dis = false;
+            _self.subStatus.dis = true;
             _self.subStatus.text = '重试';
           }else{
             _self.$createToast({txt:res.msg}).show();
             // 按钮
-            _self.subStatus.dis = true;
+            _self.subStatus.dis = false;
             _self.subStatus.text = '完成';
+            // 返回
+            _self.$router.go(-1);
           }
         }).catch(function(e){
           _self.$createToast({txt:'网络加载失败，请重试'}).show();
         });
       }else{
-        _self.$createToast({txt:'请上传封面图、视频！'}).show();
-        // 按钮
-        _self.subStatus.dis = false;
-        _self.subStatus.text = '重试';
+        _self.$createToast({txt:'请完善信息！'}).show();
       }
       return false;
     },
@@ -109,7 +111,7 @@ export default {
     // 压缩图片
     compress(file){
       let _self = this;
-      this.$inc.compressImage(file,{width: 746, height: 420},function(imgBase64) {
+      this.$inc.compressImage(file,{width: 720, height: 420},function(imgBase64) {
         _self.formData.img = imgBase64;
       });
     },
@@ -124,7 +126,7 @@ export default {
       let n = _self.formData.upload.length;
       _self.formData.upload[n-1].obj = this.$inc.camera(function(file,entry){
         // 压缩图片
-        _self.$inc.compressImage(entry.fullPath,{width: 1102, height: 620},function(imgBase64) {
+        _self.$inc.compressImage(entry.fullPath,{width: 1024, height: 768},function(imgBase64) {
           // 表单数据
           let data = [
             {type:'data',key:'token',val:_self.$inc.token()},

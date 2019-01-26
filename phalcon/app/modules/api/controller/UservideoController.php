@@ -158,6 +158,7 @@ class UserVideoController extends UserBase{
     $model = WebVideo::findFirst($id);
     $upload = json_decode($model->upload);
     // 删除文件
+    unlink(self::$imgDir.$model->img);
     foreach($upload as $val){
       if($model->type==0) unlink(self::$videoDir.$val);
       elseif($model->type==1) unlink(self::$audioDir.$val);

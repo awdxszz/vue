@@ -13,7 +13,7 @@
           <div class="audio_img" @click="selectImg()">
             <img :src="formData.img?formData.img:require('../../assets/index/img.jpg')" />
           </div>
-          <cube-form :model="formData" @submit="submitData()" class="cube-form_groups">
+          <cube-form :model="formData" @validate="validate" :immediateValidate="true" class="cube-form_groups">
             <cube-form-group legend="录制音频">
               <ul class="upload">
                 <li class="upload_img" v-for="(val,index) in formData.upload" :key="index">
@@ -45,7 +45,7 @@
               <cube-form-item :field="formField[8]"></cube-form-item>
             </cube-form-group>
             <cube-form-group>
-              <cube-button type="submit" :disabled="subStatus.dis">{{subStatus.text}}</cube-button>
+              <div class="sub" @click="submitData()">{{subStatus.text}}</div>
             </cube-form-group>
           </cube-form>
           <!-- 底线 -->
@@ -74,7 +74,9 @@
 .upload_an:active{background-color: #F2F4F6;}
 
 .cube-form-field .cube-btn{background: none; color: #CCC; text-align: left; padding-left: 0; font-size: 14px;}
-.cube-btn{color: #6FB737;}
+
+.sub{width: calc(100% - 20px); margin: 0 auto; text-align: center; padding: 15px 0; background: #4a4c5b; color: #FF6600; border-radius: 5px;}
+.sub:active{background-color: #FF6600;}
 </style>
 
 <script src="./Audio.js"></script>
