@@ -49,7 +49,7 @@
           </div>
           <!-- 拍照 -->
           <div class="in_ct mtop">
-            <div class="in_title"><span class="line" :style="{backgroundColor:'#3385FF'}"></span><span class="title">拍照</span></div>
+            <div class="in_title"><span class="line" :style="{backgroundColor:'#4CB4E7'}"></span><span class="title">拍照</span></div>
             <ul class="in_list">
               <li v-for="(val,key) in photo" :key="key" @click="videoShow(val.id)">
                 <div class="ct"><img :src="val.img"><p>{{val.title}}</p></div>
@@ -118,8 +118,8 @@
               <div class="nick" v-else><b>用户昵称</b></div>
               <div class="name">{{uinfo.uname}}<span v-if="uinfo.name">({{uinfo.name}})</span></div>
             </div>
-            <div class="img" v-if="uinfo.img" :style="{backgroundImage: 'url('+uinfo.img+')'}"></div>
-            <div class="img" v-else :style="{backgroundImage: 'url('+require('./assets/index/store_img.png')+')'}"></div>
+            <div class="img" @click="upImg()" v-if="uinfo.img" :style="{backgroundImage: 'url('+uinfo.img+')'}"></div>
+            <div class="img" @click="upImg()" v-else :style="{backgroundImage: 'url('+require('./assets/index/store_img.png')+')'}"></div>
           </div>
         </div>
         <!-- 滑动内容 -->

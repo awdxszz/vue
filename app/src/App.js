@@ -158,7 +158,7 @@ export default {
       let _self = this;
       // 用户信息
       this.$ajax.post(
-        this.$config.apiUrl+'usermain/getUinfo',
+        this.$config.apiUrl+'UserMain/getUinfo',
         'token='+this.$inc.token()
       ).then(function(res){
         let d = res.data;
@@ -185,6 +185,42 @@ export default {
     /* 扫码 */
     openBarCode(){
       this.$router.push('/codes');
+    },
+
+    /* 更换头像 */
+    upImg(){
+      let _self = this;
+      this.$createActionSheet({
+        title: '上传头像',active: 0,
+        data: [{content:'拍照'},{content:'相册'}],
+        onSelect: (item, index)=>{
+          if(index==0){
+            _self.$inc.camera(function(file,entry){
+              _self.compress(entry.fullPath);
+            });
+          }else if(index==1){
+            _self.$inc.photo(function(file){
+              _self.compress(file);
+            });
+          }
+        }
+      }).show();
+    },
+    // 压缩图片并上传
+    compress(file){
+      let _self = this;
+      this.$inc.compressImage(file,{width: 160, height: 160},function(imgBase64) {
+        _self.$ajax.post(
+          _self.$config.apiUrl+'UserMain/upImg',
+          'token='+_self.$inc.token()+'&img='+imgBase64
+        ).then(function(res){
+          res = res.data;
+          if(res.code!=0) _self.$createToast({txt:res.msg}).show();
+          else _self.uinfo.img = res.data.src;
+        }).catch(function(e){
+          _self.$createToast({txt:'网络加载失败，请重试'}).show();
+        });
+      });
     },
 
     /* 视频-选择 */
@@ -244,8 +280,6 @@ export default {
     /* 切换菜单 */
     nav(label){
       this.tabs.click=label;
-      // 加载数据
-      // this.loadData();
     },
     
     /* 监听标题栏-首页 */

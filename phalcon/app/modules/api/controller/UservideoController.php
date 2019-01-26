@@ -5,6 +5,7 @@ namespace app\modules\api\controller;
 use app\modules\api\model\WebUser;
 use app\modules\api\model\WebVideo;
 use app\library\Inc;
+use app\library\Upload;
 
 class UserVideoController extends UserBase{
 
@@ -130,7 +131,7 @@ class UserVideoController extends UserBase{
     foreach($data as $key=>$val){
       // 封面图
       if($key=='img'){
-        $up = self::uploadBase64(self::$imgDir,str_replace(' ','+',$val));
+        $up = Upload::uploadBase64(self::$imgDir,str_replace(' ','+',$val));
         if($up['status']){
           $model->img = $up['file'];
         }else{
@@ -177,11 +178,11 @@ class UserVideoController extends UserBase{
     $model = WebVideo::findFirst($id);
     $upload = json_decode($model->upload);
     // 删除文件
-    unlink(self::$imgDir.$model->img);
+    @unlink(self::$imgDir.$model->img);
     foreach($upload as $val){
-      if($model->type==0) unlink(self::$videoDir.$val);
-      elseif($model->type==1) unlink(self::$audioDir.$val);
-      elseif($model->type==2) unlink(self::$photoDir.$val);
+      if($model->type==0) @unlink(self::$videoDir.$val);
+      elseif($model->type==1) @unlink(self::$audioDir.$val);
+      elseif($model->type==2) @unlink(self::$photoDir.$val);
     }
     // 删除数据
     if($model->delete()==true){
@@ -194,7 +195,7 @@ class UserVideoController extends UserBase{
   /* 视频 */
   function videoAction(){
     // 保存
-    $up = self::upload(self::$videoDir);
+    $up = Upload::upload(self::$videoDir);
     if($up['status']){
       return self::getJSON([
         'code'=>0,
@@ -218,7 +219,7 @@ class UserVideoController extends UserBase{
   /* 音频 */
   function audioAction(){
     // 保存
-    $up = self::upload(self::$audioDir);
+    $up = Upload::upload(self::$audioDir);
     if($up['status']){
       return self::getJSON([
         'code'=>0,
@@ -243,7 +244,7 @@ class UserVideoController extends UserBase{
   function photoAction(){
     $base64 = trim($this->request->getPost('up'));
     // 保存
-    $up = self::uploadBase64(self::$photoDir,str_replace(' ','+',$base64));
+    $up = Upload::uploadBase64(self::$photoDir,str_replace(' ','+',$base64));
     if($up['status']){
       return self::getJSON([
         'code'=>0,
@@ -262,38 +263,6 @@ class UserVideoController extends UserBase{
     $file = trim($this->request->getPost('file'));
     unlink(self::$photoDir.$file);
     return self::getJSON(['code'=>0,'msg'=>'删除成功']);
-  }
-
-  // 上传处理
-  private function upload($path){
-    $upName = 'up';
-		$type = ['jpg','png','gif','mov','mp4','wav','mp3'];
-		$ext = substr(strrchr($_FILES[$upName]['name'],'.'),1);
-    $file = date('YmdHis').rand(1000,9999).'.'.$ext;
-    if(in_array($ext,$type)){
-      if(move_uploaded_file($_FILES[$upName]['tmp_name'],$path.$file)){
-        return ['status'=>true,'msg'=>'上传成功','file'=>$file];
-      }else{
-        return ['status'=>false,'msg'=>'保存图片失败！'];
-      }
-    }else{
-      return ['status'=>false,'msg'=>'只支持'.implode(',',$type).'格式！'];
-    }
-  }
-
-  // Base64上传
-  private function uploadBase64($path,$base64){
-    // 否有逗号
-    if (strstr($base64,',')) $base64=explode(',',$base64)[1];
-    // 文件名
-    $ext = 'jpg';
-    $file = date('YmdHis').rand(1000,9999).'.'.$ext;
-    // 保存
-    if(file_put_contents($path.$file,base64_decode($base64))){
-      return ['status'=>true,'msg'=>'上传成功','file'=>$file];
-    }else{
-      return ['status'=>false,'msg'=>'保存图片失败！'];
-    }
   }
 
 }
