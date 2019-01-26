@@ -13,6 +13,26 @@ class UserVideoController extends UserBase{
   static private $audioDir = 'upload/audio/';
   static private $photoDir = 'upload/photo/';
 
+  /* 首页 */
+  function indexAction(){
+    $type = trim($this->request->getPost('type'));
+    $limit = trim($this->request->getPost('limit'));
+    // 数据
+    $list = WebVideo::find([
+      'type="'.$type.'"',
+      'columns'=>'id,type,title,img',
+      'order'=>'id desc',
+      'limit'=>$limit
+    ]);
+    // 封面图
+    $data = [];
+    foreach($list as $key=>$val){
+      $val->img=Inc::BaseUrl(self::$imgDir.$val->img);
+      $data[] = $val;
+    }
+    return self::getJSON(['code'=>0,'data'=>$data,'msg'=>'查询结果']);
+  }
+
   /* 列表 */
   function listAction(){
     self::getJSON();
@@ -20,11 +40,9 @@ class UserVideoController extends UserBase{
     $limit = trim($this->request->getPost('limit'));
     $key = trim($this->request->getPost('key'));
     $uid = trim($this->request->getPost('uid'));
-    $type = trim($this->request->getPost('type'));
     // 查询条件
     $where = '(title like "%'.$key.'%" or name like "%'.$key.'%" or tel like "%'.$key.'%")';
     if($uid) $where .= ' and user_id="'.$uid.'"';
-    if($type) $where .= ' and type="'.$type.'"';
     // 查询
     $start = ($page-1)*$limit;
     $list = WebVideo::find([
@@ -66,6 +84,7 @@ class UserVideoController extends UserBase{
     return self::getJSON(['code'=>0,'data'=>[
       'type'=>$one->type,
       'title'=>$one->title,
+      'img'=>Inc::BaseUrl(self::$imgDir.$one->img),
       'upload'=>$up,
       'info'=>[
         [

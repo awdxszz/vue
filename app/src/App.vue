@@ -33,8 +33,8 @@
           <div class="in_ct mtop">
             <div class="in_title"><span class="line" :style="{backgroundColor:'#6FB737'}"></span><span class="title">视频</span></div>
             <ul class="in_list">
-              <li v-for="(val,key) in video" :key="key">
-                <div class="ct"><img :src="val.image"><p>{{val.title}}</p></div>
+              <li v-for="(val,key) in video" :key="key" @click="videoShow(val.id)">
+                <div class="ct"><img :src="val.img"><p>{{val.title}}</p></div>
               </li>
             </ul>
           </div>
@@ -42,8 +42,8 @@
           <div class="in_ct mtop">
             <div class="in_title"><span class="line" :style="{backgroundColor:'#FF6600'}"></span><span class="title">录音</span></div>
             <ul class="in_list">
-              <li v-for="(val,key) in audio" :key="key">
-                <div class="ct"><img :src="val.image"><p>{{val.title}}</p></div>
+              <li v-for="(val,key) in audio" :key="key" @click="videoShow(val.id)">
+                <div class="ct"><img :src="val.img"><p>{{val.title}}</p></div>
               </li>
             </ul>
           </div>
@@ -51,8 +51,8 @@
           <div class="in_ct mtop">
             <div class="in_title"><span class="line" :style="{backgroundColor:'#3385FF'}"></span><span class="title">拍照</span></div>
             <ul class="in_list">
-              <li v-for="(val,key) in photo" :key="key">
-                <div class="ct"><img :src="val.image"><p>{{val.title}}</p></div>
+              <li v-for="(val,key) in photo" :key="key" @click="videoShow(val.id)">
+                <div class="ct"><img :src="val.img"><p>{{val.title}}</p></div>
               </li>
             </ul>
           </div>

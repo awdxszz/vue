@@ -126,7 +126,7 @@ export default {
       let n = _self.formData.upload.length;
       _self.formData.upload[n-1].obj = this.$inc.camera(function(file,entry){
         // 压缩图片
-        _self.$inc.compressImage(entry.fullPath,{width: 1024, height: 768},function(imgBase64) {
+        _self.$inc.compressImage(entry.fullPath,{width: 1024, height: 640},function(imgBase64) {
           // 表单数据
           let data = [
             {type:'data',key:'token',val:_self.$inc.token()},

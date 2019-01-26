@@ -11,13 +11,11 @@ export default {
         show:{events: ['scroll'], y: 0, color: 0, options:{pullDownRefresh: {threshold: 60,stop: 40,txt: '已更新'}}},
       },
       // 轮播图
-      slideList:[
-        {url:'',image:'http://ykimg.alicdn.com/develop/image/2019-01-06/ebc586d55c677afcad8ebd92bcf2ed26.jpg'},
-        {url:'',image:'http://ykimg.alicdn.com/develop/image/2019-01-07/2a460ca9000e7fb395a212f6344dad2e.jpg'},
-      ],
+      slideList:[],
       // 用户信息
       type:'',
       title:'',
+      img:'',
       infoList:[]
     }
   },
@@ -46,6 +44,7 @@ export default {
         }else{
           _self.type = d.data.type;
           _self.title = d.data.title;
+          _self.img = d.data.img;
           _self.slideList = d.data.upload;
           _self.infoList = d.data.info;
         }

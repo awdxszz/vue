@@ -36,30 +36,15 @@ export default {
         {url:'',image:'http://ykimg.alicdn.com/develop/image/2019-01-06/ebc586d55c677afcad8ebd92bcf2ed26.jpg'},
         {url:'',image:'http://ykimg.alicdn.com/develop/image/2019-01-07/2a460ca9000e7fb395a212f6344dad2e.jpg'},
       ],
-      video:[
-        {title:'回到明朝当王爷之杨凌传',url:'',image:'http://r1.ykimg.com/050C00005BFE61C8ADA80C3FB0005C6F'},
-        {title:'我的保姆手册',url:'',image:'http://r1.ykimg.com/050C00005BFE639FADA80C365B057C86'},
-        {title:'原来你还在这里',url:'',image:'http://r1.ykimg.com/050C00005BFE62A9AD9AB7376B0BFC33'},
-        {title:'时空侠',url:'',image:'http://r1.ykimg.com/050C00005BFE5FC8AD9AB738F6060151'},
-      ],
-      audio:[
-        {title:'轩辕剑苍之曜',url:'',image:'http://r1.ykimg.com/050C00005BAF1B95AD9AB773C60A5C30'},
-        {title:'樱桃小丸子 第二季',url:'',image:'http://r1.ykimg.com/050C00005AC1DB71ADC0AEACAE08549E'},
-        {title:'名侦探柯南',url:'',image:'http://r1.ykimg.com/050C00005AB63A5FADC0B0682A010AB1'},
-        {title:'黑色四叶草',url:'',image:'http://r1.ykimg.com/050C00005B72B146AD9AB7BE7804BD89'},
-      ],
-      photo:[
-        {title:'古剑奇谭2',url:'',image:'http://r1.ykimg.com/050C00005B448196ADBDD3DE51098FB0'},
-        {title:'一千零一夜TV版',url:'',image:'http://r1.ykimg.com/050C00005A0BD1A3AD881A048E019C17'},
-        {title:'局部 第二季',url:'',image:'http://r1.ykimg.com/050C00005AB48CE3ADBC09AE2B05CEDE'},
-        {title:'环太平洋：雷霆再起',url:'',image:'http://r1.ykimg.com/050C00005AB0949FAD881A05B80529DD'},
-      ],
       // 菜单
       menus:[
         {name:'视频',url:'/video/video',ico:require('./assets/index/video.svg')},
         {name:'录音',url:'/video/audio',ico:require('./assets/index/audio.svg')},
         {name:'拍照',url:'/video/photo',ico:require('./assets/index/photo.svg')},
       ],
+      video:[],
+      audio:[],
+      photo:[],
       /* 视频 */
       videoSea:{key:''},
       videoData:[],
@@ -89,12 +74,10 @@ export default {
 
     /* 下拉刷新-首页 */
     indexDown(){
-      console.log('AJAX');
-      this.$refs.indexScroll.forceUpdate();
+      this.loadDataIndex();
     },
     /* 下拉刷新-视频 */
     videoDown(){
-      // 加载数据
       this.loadDataVideo();
     },
     /* 下拉刷新-我的 */
@@ -105,6 +88,41 @@ export default {
     /* 加载数据-首页 */
     loadDataIndex(){
       let _self = this;
+      // 视频
+      this.$ajax.post(
+        this.$config.apiUrl+'UserVideo/index',
+        'token='+this.$inc.token()+'&type=0&limit=4'
+      ).then(function(res){
+        let d = res.data;
+        if(d.code!==0) _self.$createToast({txt:res.msg}).show();
+        else _self.video = d.data;
+      }).catch(function(e){
+        _self.$createToast({txt:'网络加载失败，请重试'}).show();
+      });
+      // 音频
+      this.$ajax.post(
+        this.$config.apiUrl+'UserVideo/index',
+        'token='+this.$inc.token()+'&type=1&limit=4'
+      ).then(function(res){
+        let d = res.data;
+        if(d.code!==0) _self.$createToast({txt:res.msg}).show();
+        else _self.audio = d.data;
+      }).catch(function(e){
+        _self.$createToast({txt:'网络加载失败，请重试'}).show();
+      });
+      // 照片
+      this.$ajax.post(
+        this.$config.apiUrl+'UserVideo/index',
+        'token='+this.$inc.token()+'&type=2&limit=4'
+      ).then(function(res){
+        let d = res.data;
+        if(d.code!==0) _self.$createToast({txt:res.msg}).show();
+        else _self.photo = d.data;
+      }).catch(function(e){
+        _self.$createToast({txt:'网络加载失败，请重试'}).show();
+      });
+      // 加载动画
+      _self.$refs.indexScroll.forceUpdate();
     },
 
     /* 搜索 */

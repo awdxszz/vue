@@ -17,7 +17,9 @@
           <cube-slide-item v-for="(val, index) in slideList" :key="index">
             <!-- <a :href="item.url" :style="{height:'210px',background:'url('+item.image+') no-repeat center center #FFF',backgroundSize: 'auto 100%'}"></a> -->
             <a href="#" style="height:auto">
-              <video v-if="type=='0'" :src="val" conrtols="true" />
+              <video v-if="type=='0'" conrtols="true" :poster="img">
+                <source :src="val" type="video/mp4">
+              </video>
               <audio v-if="type=='1'" :src="val" conrtols="true" />
               <img v-if="type=='2'" :src="val" />
             </a>
@@ -40,9 +42,9 @@
 </template>
 
 <style lang="less" scoped>
-.cube-slide video{width: 100%;}
+.cube-slide video{width: 100%; background-color: #FFF;}
 .cube-slide audio{width: 100%;}
-.cube-slide img{width: 100%;}
+.cube-slide img{width: 100%; background-color: #FFF;}
 
 .list{overflow: hidden;}
 .list li{height: 54px; line-height: 54px; padding-left: 15px; background-color: #FFF;}
