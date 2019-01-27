@@ -44,7 +44,7 @@ export default {
           // 跳转首页
           _self.$createToast({txt:'登录成功'}).show();
           setTimeout(function(){
-            _self.$router.go(-1);
+            _self.$router.push('/');
           },600);
         }else{
           _self.$createToast({txt:d.msg}).show();
