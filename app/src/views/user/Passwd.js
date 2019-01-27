@@ -33,11 +33,9 @@ export default {
     /* 提交 */
     validate(result){
       this.subStatus.dis = result.valid;
-      console.log(result);
     },
     submitData(){
       let _self = this;
-      console.log(this.subStatus.dis);
       if(this.subStatus.dis){
         // 按钮
         this.subStatus.dis = false;
@@ -49,7 +47,6 @@ export default {
           'token='+this.$inc.token()+'&data='+data
         ).then(function(res){
           res = res.data;
-          console.log(res);
           if(res.code!=0){
             _self.$createToast({txt:res.msg}).show();
             // 按钮
