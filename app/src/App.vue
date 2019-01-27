@@ -206,7 +206,7 @@
 </template>
 
 <style lang="less">
-// *{touch-action: pan-y;}
+*{touch-action: pan-y;}
 html,body,h1,h2,ul{margin: 0; padding: 0; vertical-align: baseline;}
 html,body,#app{overflow: hidden; width: 100%; height: 100%;}
 #app{position: absolute; z-index: 1; left: 0; top: 0; color: #333; font-size: 14px; font-family: 'Avenir', Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;}

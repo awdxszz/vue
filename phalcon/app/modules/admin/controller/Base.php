@@ -26,6 +26,11 @@ class Base extends Controller{
     return $this->response->setJsonContent($data);
   }
 
+  /* 错误信息 */
+  static protected function error($perm=''){
+    throw new \InvalidArgumentException($perm);
+  }
+
   /* Token-验证 */
   protected function verToken($token){
     // 解密

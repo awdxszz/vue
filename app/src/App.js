@@ -75,6 +75,8 @@ export default {
     /* 下拉刷新-首页 */
     indexDown(){
       this.loadDataIndex();
+      // 加载动画
+      this.$refs.indexScroll.forceUpdate();
     },
     /* 下拉刷新-视频 */
     videoDown(){
@@ -121,8 +123,6 @@ export default {
       }).catch(function(e){
         _self.$createToast({txt:'网络加载失败，请重试'}).show();
       });
-      // 加载动画
-      _self.$refs.indexScroll.forceUpdate();
     },
 
     /* 搜索 */
@@ -158,7 +158,7 @@ export default {
       let _self = this;
       // 用户信息
       this.$ajax.post(
-        this.$config.apiUrl+'UserMain/getUinfo',
+        this.$config.apiUrl+'UserInfo/getUinfo',
         'token='+this.$inc.token()
       ).then(function(res){
         let d = res.data;
@@ -211,7 +211,7 @@ export default {
       let _self = this;
       this.$inc.compressImage(file,{width: 160, height: 160},function(imgBase64) {
         _self.$ajax.post(
-          _self.$config.apiUrl+'UserMain/upImg',
+          _self.$config.apiUrl+'UserInfo/upImg',
           'token='+_self.$inc.token()+'&img='+imgBase64
         ).then(function(res){
           res = res.data;
@@ -280,6 +280,10 @@ export default {
     /* 切换菜单 */
     nav(label){
       this.tabs.click=label;
+      // 刷新数据
+      if(label=='首页') this.loadDataIndex();
+      else if(label=='采访') this.loadDataVideo();
+      else if(label=='我的') this.loadDataMe();
     },
     
     /* 监听标题栏-首页 */

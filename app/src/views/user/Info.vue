@@ -10,7 +10,7 @@
     <div id="codeCT" class="info_ct">
       <cube-scroll ref="infoScroll" :scroll-events="scroll.info.events" @pulling-down="infoDown" :options="scroll.info.options">
         <cube-swipe>
-          <cube-form :model="formData" class="cube-form_groups">
+          <cube-form :model="formData" @validate="validate" :immediateValidate="true" class="cube-form_groups">
             <cube-form-group>
               <cube-form-item :field="formField[0]"></cube-form-item>
               <cube-form-item :field="formField[1]"></cube-form-item>
@@ -21,7 +21,7 @@
               <cube-form-item :field="formField[8]"></cube-form-item>
             </cube-form-group>
             <cube-form-group>
-              <cube-button type="submit">提交</cube-button>
+              <div class="sub" @click="submitData()">{{subStatus.text}}</div>
             </cube-form-group>
           </cube-form>
           <!-- 底线 -->
@@ -34,10 +34,12 @@
 
 <style lang="less" scoped>
 .top_header{background-color: #6FB737;}
-.info_ct{height: calc(100% - 60px);}
+.info_ct{height: calc(100% - 66px);}
 
 .cube-form-field .cube-btn{background: none; color: #CCC; text-align: left; padding-left: 0; font-size: 14px;}
-.cube-btn{color: #6FB737;}
+
+.sub{width: calc(100% - 20px); margin: 0 auto; text-align: center; padding: 15px 0; background: #4a4c5b; color: #6FB737; border-radius: 5px;}
+.sub:active{background-color: #6FB737;}
 </style>
 
 <script src="./Info.js"></script>
