@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主机： localhost
--- 生成日期： 2019-01-26 19:20:09
+-- 生成日期： 2019-01-27 14:35:08
 -- 服务器版本： 10.3.12-MariaDB
 -- PHP 版本： 7.3.1
 
@@ -48,7 +48,7 @@ CREATE TABLE `sys_admin` (
 --
 
 INSERT INTO `sys_admin` (`id`, `code`, `uname`, `password`, `email`, `tel`, `name`, `department`, `position`, `rtime`, `state`, `perm`) VALUES
-(1, '201812130958240001', 'admin', '21232f297a57a5a743894a0e4a801fc3', 'klingsoul@163.com', '15087738003', '管理员', '技术部', '终极管理员', '2018-12-15 00:00:00', '1', '1:0 2:0 3:0 4:0 5:1 6:31 7:31 8:31');
+(1, '201812130958240001', 'admin', '21232f297a57a5a743894a0e4a801fc3', 'klingsoul@163.com', '15087738003', '管理员', '技术部', '终极管理员', '2018-12-15 00:00:00', '1', '1:0 2:0 3:0 4:0 5:1 6:31 7:31 8:31 10:0 11:0 12:19 13:19');
 
 -- --------------------------------------------------------
 
@@ -81,7 +81,11 @@ INSERT INTO `sys_menus` (`id`, `fid`, `title`, `url`, `perm`, `ico`, `ctime`, `s
 (6, 4, '菜单管理', 'SysMenus', 31, 'fa fa-file-text fa-1x', '2018-12-15 00:00:00', 0, ''),
 (7, 4, '菜单动作', 'SysMenusAction', 31, 'fa fa-pencil fa-1x', '2018-12-15 00:00:00', 0, ''),
 (8, 4, '系统用户', 'SysAdmins', 63, 'fa fa-users fa-1x', '2018-12-15 00:00:00', 0, ''),
-(9, 2, '日志管理', '', 0, '', '2018-12-15 00:00:00', 0, '');
+(9, 2, '日志管理', '', 0, '', '2018-12-15 00:00:00', 0, ''),
+(10, 0, 'APP', '', 0, 'fa fa-tablet fa-lg', '2019-01-27 11:28:31', 0, ''),
+(11, 10, '业务数据', '', 0, '', '2019-01-27 11:29:09', 0, ''),
+(12, 11, '用户管理', 'WebUser', 19, 'fa fa-user-circle-o fa-lg', '2019-01-27 11:31:10', 0, ''),
+(13, 11, '采访内容', 'WebVideo', 19, 'fa fa-video-camera fa-lg', '2019-01-27 11:31:59', 0, '');
 
 -- --------------------------------------------------------
 
@@ -102,7 +106,7 @@ CREATE TABLE `sys_menus_action` (
 --
 
 INSERT INTO `sys_menus_action` (`id`, `name`, `action`, `perm`, `ico`) VALUES
-(1, '列表', 'list', '1', 'el-icon-refresh'),
+(1, '全部', 'list', '1', 'el-icon-refresh'),
 (2, '搜索', 'sea', '2', 'el-icon-search'),
 (3, '添加', 'add', '4', 'el-icon-plus'),
 (4, '编辑', 'edit', '8', 'el-icon-edit'),
@@ -205,7 +209,7 @@ ALTER TABLE `sys_admin`
 -- 使用表AUTO_INCREMENT `sys_menus`
 --
 ALTER TABLE `sys_menus`
-  MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID', AUTO_INCREMENT=10;
+  MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID', AUTO_INCREMENT=14;
 
 --
 -- 使用表AUTO_INCREMENT `sys_menus_action`
