@@ -102,7 +102,7 @@ class UserVideoController extends UserBase{
             ['name'=>'姓名','value'=>$one->name],
             ['name'=>'电话','value'=>$one->tel],
             ['name'=>'性别','value'=>$one->sex],
-            ['name'=>'生日','value'=>$one->birthday],
+            ['name'=>'生日','value'=>date('Y-m-d',$one->birthday)],
             ['name'=>'文化程度','value'=>$one->education],
           ]
         ],

@@ -1,6 +1,6 @@
 import Ajax from '@/components/Ajax'
 export default {
-  name:'SysMenusAction',
+  name:'WebVideo',
   components: {Ajax},
   data(){
     return {
@@ -11,17 +11,15 @@ export default {
       selectData:[],
       // 分页
       pageData:{list:[], total:0, page:1, limit:15},
-      // 搜索、添加、编辑、删除
-      seaData:{isShow:false,form:{name:'',action:'',ico:''}},
-      addData:{isShow:false,form:{name:'',action:'',perm:'',ico:''}},
-      editData:{isShow:false,form:{name:'',action:'',perm:'',ico:''}},
+      // 搜索、删除
+      seaData:{isShow:false,form:{type:'',title:'',name:'',tel:''}},
       delData:{isShow:false},
     }
   },
   mounted(){
     let _self = this;
     // 动作菜单
-    this.$refs.ajax.post('UserMain/getMenusAction','&url=SysMenusAction',function(res){
+    this.$refs.ajax.post('UserMain/getMenusAction','&url=WebVideo',function(res){
       let d = res.data;
       if(d.code!==0){
         _self.$message.error(d.msg);
@@ -40,7 +38,7 @@ export default {
       // 分页数据
       const loading = this.$loading({lock: true, text: '分页数据', background: 'rgba(0,0,0,0.2)'});
       let perm = '&page='+this.pageData.page+'&limit='+this.pageData.limit+'&key='+JSON.stringify(this.seaData.form);
-      this.$refs.ajax.post('SysMenusAction/list',perm,function(res){
+      this.$refs.ajax.post('WebVideo/list',perm,function(res){
         let d = res.data;
         if(d.code!==0){
           _self.$message.error(d.msg);
@@ -67,7 +65,7 @@ export default {
     /* 动作菜单 */
     openAction(action){
       if(action=='list'){
-        this.seaData.form = {name:'',action:'',ico:''};
+        this.seaData.form = {type:'',title:'',name:'',tel:''};
         this.pageData.page = 1;
         this.loadData();
       }else if(action=='sea'){
@@ -102,41 +100,6 @@ export default {
       this.loadData();
     },
 
-    /* 添加 */
-    subAdd(){
-      let _self = this;
-      this.addData.isShow=false;
-      // 提交
-      this.$refs.ajax.post('SysMenusAction/add','&key='+JSON.stringify(this.addData.form),function(res){
-        let d = res.data;
-        if(d.code!==0){
-          _self.$message.error(d.msg);
-        }else{
-          _self.$message({message:d.msg,type: 'success'});
-          // 刷新数据
-          _self.loadData();
-        }
-      });
-    },
-
-    /* 编辑 */
-    subEdit(){
-      let _self = this;
-      this.editData.isShow=false;
-      // 提交
-      let post = JSON.stringify(this.editData.form);
-      this.$refs.ajax.post('SysMenusAction/edit','&id='+this.editData.form.id+'&key='+post,function(res){
-        let d = res.data;
-        if(d.code!==0){
-          _self.$message.error(d.msg);
-        }else{
-          _self.$message({message:d.msg,type: 'success'});
-        }
-        // 刷新数据
-        _self.loadData();
-      });
-    },
-
     /* 删除 */
     subDel(){
       let _self = this;
@@ -146,7 +109,7 @@ export default {
       let id = '';
       for(let i=0; i<data.length; i++) id += data[i].id+',';
       // 提交
-      this.$refs.ajax.post('SysMenusAction/del','&key='+id,function(res){
+      this.$refs.ajax.post('WebVideo/del','&key='+id,function(res){
         let d = res.data;
         if(d.code!==0){
           _self.$message.error(d.msg);

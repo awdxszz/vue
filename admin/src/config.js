@@ -3,12 +3,15 @@
 */
 export default function install(Vue){
 
+  // const baseUrl = 'http://192.168.1.88:9091/';
+  const baseUrl = 'http://vue.webmis.vip/';
+
   // 配置
   Vue.prototype.$config = {
     name:'WebMIS',
     version: '0.0.1',
-    // apiUrl: 'http://192.168.1.88:9091/admin/',
-    apiUrl: 'http://vue.webmis.vip/admin/',
+    apiUrl: baseUrl+'admin/',
+    uploadUrl: baseUrl+'upload/',
   }
 
   // 本地硬盘

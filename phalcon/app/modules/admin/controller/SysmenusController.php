@@ -20,14 +20,14 @@ class SysMenusController extends UserBase {
     }
     // 分段
     $page = trim($this->request->getPost('page'));
-    $pagesize = trim($this->request->getPost('pagesize'));
-    $start = ($page-1)*$pagesize;
+    $limit = trim($this->request->getPost('limit'));
+    $start = ($page-1)*$limit;
     $total = SysMenu::count([$where]);
     $menus = SysMenu::find([
       $where,
       'columns'=>'id,fid,title,url,ico,ctime,perm',
       'order'=>'fid desc, id desc',
-      'limit'=>['number'=>$pagesize,'offset'=>$start]
+      'limit'=>['number'=>$limit,'offset'=>$start]
     ]);
     return self::getJSON(['code'=>0,'list'=>$menus,'total'=>$total]);
   }

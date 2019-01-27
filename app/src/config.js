@@ -3,8 +3,8 @@
 */
 export default function install(Vue){
 
-  let baseUrl = 'http://192.168.1.88:9091/';
-  // let baseUrl = 'http://vue.webmis.vip/';
+  // const baseUrl = 'http://192.168.1.88:9091/';
+  const baseUrl = 'http://vue.webmis.vip/';
 
   // 配置
   Vue.prototype.$config = {

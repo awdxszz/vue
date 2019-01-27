@@ -12,5 +12,8 @@ export default new Router({
     {path:'/SysMenus', name:'SysMenus', component:resolve=>require(['./views/system/Menus.vue'],resolve)},
     {path:'/SysMenusAction', name:'SysMenusAction', component:resolve=>require(['./views/system/Action.vue'],resolve)},
     {path:'/SysAdmins', name:'SysAdmins', component:resolve=>require(['./views/system/Admin.vue'],resolve)},
+    // APP
+    {path:'/WebUser', name:'WebUser', component:resolve=>require(['./views/app/User.vue'],resolve)},
+    {path:'/WebVideo', name:'WebVideo', component:resolve=>require(['./views/app/Video.vue'],resolve)},
   ]
 })

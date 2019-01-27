@@ -10,7 +10,7 @@ export default {
       // 勾选
       selectData:[],
       // 分页
-      pageData:{list:[], total:0, page:1, pageSize:15},
+      pageData:{list:[], total:0, page:1, limit:15},
       // 搜索、添加、编辑、删除
       seaData:{isShow:false,form:{fid:'',title:'',url:''}},
       addData:{isShow:false,form:{fid:'',title:'',url:'',ico:'',perm:'',permArr:[]}},
@@ -55,7 +55,7 @@ export default {
       let _self = this;
       // 分页数据
       const loading = this.$loading({lock: true, text: '分页数据', background: 'rgba(0,0,0,0.2)'});
-      let perm = '&page='+this.pageData.page+'&pagesize='+this.pageData.pageSize+'&key='+JSON.stringify(this.seaData.form);
+      let perm = '&page='+this.pageData.page+'&limit='+this.pageData.limit+'&key='+JSON.stringify(this.seaData.form);
       this.$refs.ajax.post('SysMenus/list',perm,function(res){
         let d = res.data;
         if(d.code!==0){

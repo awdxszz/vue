@@ -22,14 +22,14 @@ class SysadminsController extends UserBase {
     }
     // 分段
     $page = trim($this->request->getPost('page'));
-    $pagesize = trim($this->request->getPost('pagesize'));
-    $start = ($page-1)*$pagesize;
+    $limit = trim($this->request->getPost('limit'));
+    $start = ($page-1)*$limit;
     $total = SysAdmin::count([$where]);
     $menus = SysAdmin::find([
       $where,
       'columns'=>'id,code,uname,tel,email,name,department,position,state,perm',
       'order'=>'id desc',
-      'limit'=>['number'=>$pagesize,'offset'=>$start]
+      'limit'=>['number'=>$limit,'offset'=>$start]
     ]);
     return self::getJSON(['code'=>0,'list'=>$menus,'total'=>$total]);
   }

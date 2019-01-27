@@ -36,8 +36,8 @@ class SysMenu extends Model{
   
   /* 名称 */
   public function setTitle($title){
-    if(!preg_match('/^[\x7f-\xff_a-zA-Z]{4,18}$/',$title)){
-      throw new \InvalidArgumentException('为2~6位汉字或4~18位英文！');
+    if(!preg_match('/^[\x7f-\xff_a-zA-Z]{3,18}$/',$title)){
+      throw new \InvalidArgumentException('为2~6位汉字或3~18位英文！');
     }
     $this->title = $title;
   }
