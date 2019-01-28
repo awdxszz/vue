@@ -98,8 +98,6 @@ export default {
         let d = res.data;
         if(d.code!==0) _self.$createToast({txt:res.msg}).show();
         else _self.video = d.data;
-      }).catch(function(e){
-        _self.$createToast({txt:'网络加载失败，请重试'}).show();
       });
       // 音频
       this.$ajax.post(
@@ -109,8 +107,6 @@ export default {
         let d = res.data;
         if(d.code!==0) _self.$createToast({txt:res.msg}).show();
         else _self.audio = d.data;
-      }).catch(function(e){
-        _self.$createToast({txt:'网络加载失败，请重试'}).show();
       });
       // 照片
       this.$ajax.post(
@@ -120,8 +116,6 @@ export default {
         let d = res.data;
         if(d.code!==0) _self.$createToast({txt:res.msg}).show();
         else _self.photo = d.data;
-      }).catch(function(e){
-        _self.$createToast({txt:'网络加载失败，请重试'}).show();
       });
     },
 
@@ -147,10 +141,9 @@ export default {
           _self.videoData = d.data;
         }
         // 加载动画
-        _self.$refs.videoScroll.forceUpdate();
-      }).catch(function(e){
-        _self.$createToast({txt:'网络加载失败，请重试'}).show();
+        if(_self.$refs.videoScroll) _self.$refs.videoScroll.forceUpdate();
       });
+      
     },
 
     /* 加载数据-我的 */
@@ -165,13 +158,11 @@ export default {
         if(d.code!==0){
           _self.$createToast({txt:res.msg}).show();
         }else{
-          _self.uinfo = d.data;
+          if(d.data) _self.uinfo = d.data;
           _self.uinfo.uname = _self.$storage.getItem('uname');
         }
         // 加载动画
-        _self.$refs.meScroll.forceUpdate();
-      }).catch(function(e){
-        _self.$createToast({txt:'网络加载失败，请重试'}).show();
+        if(_self.$refs.meScroll) _self.$refs.meScroll.forceUpdate();
       });
       // 系统缓存
       document.addEventListener('plusready', this.getDrcSize(), false);
