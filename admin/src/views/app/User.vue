@@ -44,7 +44,7 @@
             <div class="img" :style="{backgroundImage:'url('+scope.row.img+')'}"></div>
           </template>
         </el-table-column>
-        <el-table-column prop="nickname" label="昵称" width="80"></el-table-column>
+        <el-table-column prop="nickname" label="昵称"></el-table-column>
         <el-table-column prop="name" label="姓名" width="80"></el-table-column>
         <el-table-column prop="sex" label="性别" width="80"></el-table-column>
         <el-table-column prop="tel" label="手机号码"></el-table-column>
